@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:xcpilots/data/mock/news.dart';
 import 'package:xcpilots/data/translation.dart';
+import 'package:xcpilots/models/news_model.dart';
 import 'package:xcpilots/widgets/NewsCard.dart';
 
 class SingleNewsPage extends StatefulWidget {

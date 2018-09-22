@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:xcpilots/data/translation.dart';
-import 'package:xcpilots/widgets/NewsList.dart';
+import 'package:xcpilots/widgets/news_ui.dart';
 
 class NewsPage extends StatefulWidget {
   @override
