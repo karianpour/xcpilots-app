@@ -4,12 +4,10 @@ import 'package:xcpilots/data/XcPilotsApi.dart';
 import 'package:xcpilots/models/app_state.dart';
 
 List<Middleware<AppState>> createNewsMiddlewares(){
-
   return [
     new TypedMiddleware<AppState, NewsFetchMoreRowsAction>(_fetchMoreRows()),
   ];
 }
-
 
 Middleware<AppState> _fetchMoreRows(){
   return (Store store, action, NextDispatcher next) async{
@@ -19,11 +17,11 @@ Middleware<AppState> _fetchMoreRows(){
     store.dispatch(new NewsFetchingMoreRowsAction(true));
 
     String before;
-    Map _cachedRows = state['news']['rows'];
+    Map<String, dynamic> _cachedRows = state['news']['rows'];
     int _lastRowIndex = state['news']['lastRowIndex'];
 
     if(_cachedRows != null && _lastRowIndex != null && _lastRowIndex >= 0){
-      before = _cachedRows[_lastRowIndex]['created_at'];
+      before = _cachedRows[_lastRowIndex.toString()]['created_at'];
       print('fetching before $before');
     }else{
       print('first time fetch');

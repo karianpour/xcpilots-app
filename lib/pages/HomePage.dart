@@ -3,37 +3,7 @@ import 'package:flutter/rendering.dart';
 import 'package:xcpilots/XcPilotsTheme.dart';
 import 'package:xcpilots/data/translation.dart';
 
-class HomePage extends StatefulWidget {
-  @override
-  _HomePageState createState() => new _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
-  PageController _pageController;
-  int _page = 0;
-
-  @override
-  void initState() {
-    super.initState();
-    _pageController = new PageController();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    _pageController.dispose();
-  }
-
-  void navigationTapped(int page) {
-    _pageController.animateToPage(page,
-        duration: const Duration(milliseconds: 300), curve: Curves.ease);
-  }
-
-  void onPageChanged(int page) {
-    setState(() {
-      this._page = page;
-    });
-  }
+class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +22,7 @@ class _HomePageState extends State<HomePage> {
 _dashboard(BuildContext context) {
   final mediaQueryData = MediaQuery.of(context);
   final double topPadding = mediaQueryData.size.height > 600 ? mediaQueryData.size.height - 600 : 0;
-  const double imagePadding = 80.0; //mediaQueryData.size.width / 4;
+//  const double imagePadding = 80.0; //mediaQueryData.size.width / 4;
   return Container(
     constraints: BoxConstraints.expand(),
     decoration: BoxDecoration(

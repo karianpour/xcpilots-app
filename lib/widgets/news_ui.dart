@@ -1,37 +1,53 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:redux/redux.dart';
-import 'package:xcpilots/actions/news_actions.dart';
 import 'package:xcpilots/models/app_state.dart';
-import 'package:xcpilots/widgets/NewsCard.dart';
+import 'package:flutter/widgets.dart';
+import 'package:flutter_image/network.dart';
+import 'package:xcpilots/models/news_model.dart';  
 
 class NewsList extends StatelessWidget {
 
-  Map _getRowData(_ViewModel vm, int index){
-    Map row = vm.rows[index];
+  //final ScrollController _scrollController = ScrollController();
+
+  // NewsList(){
+  //   _scrollController.addListener((){
+  //     print('position: ${_scrollController.position}');
+  //   });
+  // }
+
+  Map _getRowData(NewsListModel vm, int index){
+    Map row = vm.rows[index.toString()];
     if(row == null){
-      vm.rows[index] = {'loading': true};
+      vm.rows[index.toString()] = {'loading': true};
       vm.fetchMoreRows();
     }
     return row;
   }
 
 
-  Widget _buildList(_ViewModel vm){
-    return ListView.builder(
-      padding: const EdgeInsets.all(0.0),
+  Widget _buildList(NewsListModel vm){
+    return NotificationListener(
+      onNotification: (notifiction){
+        if(notifiction is ScrollNotification){
+          vm.saveScrollPosition(notifiction.metrics.pixels);
+        }
+      },
+      child: ListView.builder(
+        padding: const EdgeInsets.all(0.0),
+        controller: vm.scrollController,
 
-      itemCount: vm.rowQty,
+        itemCount: vm.rowQty,
 
-      itemBuilder: (context, index) {
-        var row = _getRowData(vm, index);
-        return NewsCard(row, index);
-      }
+        itemBuilder: (context, index) {
+          var row = _getRowData(vm, index);
+          return NewsCard(row, index);
+        }
+      ),
     );
   }
 
-  Widget _buildLoading(_ViewModel vm){
+  Widget _buildLoading(NewsListModel vm){
     if(vm!=null) vm.fetchMoreRows();
     return const Center(
         child: const CupertinoActivityIndicator(),
@@ -44,7 +60,7 @@ class NewsList extends StatelessWidget {
     );
   }
 
-  Widget _firstPageFailed(_ViewModel vm){
+  Widget _firstPageFailed(NewsListModel vm){
     return RefreshIndicator(
       child: Center(
         child: Column(
@@ -64,10 +80,10 @@ class NewsList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return new StoreConnector<AppState, _ViewModel>(
+    return StoreConnector<AppState, NewsListModel>(
     		// Build a viewModel, as usual:
-        converter: _ViewModel.fromStore,
-        builder: (BuildContext context, _ViewModel vm) {
+        converter: NewsListModel.fromStore,
+        builder: (BuildContext context, NewsListModel vm) {
 
           if(vm==null){
             return _buildLoading(vm);
@@ -83,7 +99,7 @@ class NewsList extends StatelessWidget {
           }
           return new RefreshIndicator(
             child: SafeArea(
-              child: _buildList(vm)
+                child: _buildList(vm),
             ),
             onRefresh: vm.refresh,
           );
@@ -93,50 +109,79 @@ class NewsList extends StatelessWidget {
   }
 }
 
-class _ViewModel {
-  final int rowQty;
-  final bool noRowAvailable;
-  final bool lastTimeFailed;
-  final int lastRowIndex;
-  final Map rows;
-  final bool fetching;
+class NewsCard extends StatelessWidget {
 
-  final VoidCallback refresh;
-  final VoidCallback fetchMoreRows;
+  final Map data;
+  final int index;
 
-  _ViewModel({this.rowQty, this.noRowAvailable, this.lastTimeFailed, this.lastRowIndex, this.rows, this.fetching, this.refresh, this.fetchMoreRows});
+  NewsCard(this.data, this.index);
 
-  static _ViewModel fromStore(Store<AppState> store){
-    Map news = store.state.state['news'];
-
-    if(news==null){
-      store.dispatch(new NewsRefreshAction());
-      news = store.state.state['news'];
-    }
-
-    // //todo remove it
-
-    // news = news ?? {
-    //   'rowQty': 0,
-    //   'noRowAvailable': false,
-    //   'lastTimeFailed': false,
-    //   'lastRowIndex': null,
-    //   'rows': [],
-    //   'fetching': false,
-    // };
-    return _ViewModel(
-      rowQty: news['rowQty'],
-      noRowAvailable: news['noRowAvailable'],
-      lastTimeFailed: news['lastTimeFailed'],
-      lastRowIndex: news['lastRowIndex'],
-      rows: news['rows'],
-      fetching: news['fetching'],
-      refresh: () {
-        store.dispatch(new NewsRefreshAction());
+  @override
+  Widget build(BuildContext context) {
+    return FlatButton(
+      padding: EdgeInsets.all(3.0),
+      onPressed: () {
+       String route = '/single_news/${data["id"]}';
+       Navigator.pushNamed(context, route);
       },
-      fetchMoreRows: () {
-        store.dispatch(new NewsFetchMoreRowsAction());
-      },
+      child: Card(
+        margin: EdgeInsets.only(top: 4.0, bottom: 4.0),
+        child: Padding(
+          padding: EdgeInsets.fromLTRB(0.0, 4.0, 0.0, 4.0),
+          child: Row(
+            children: <Widget>[
+              Expanded(
+                flex: 1,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: <Widget>[
+                    AspectRatio(
+                      aspectRatio: 4.0/3.0,
+                      child: buildNewsImage(data)
+                    ),
+                    Text(
+                      getNewsTitle(data),
+                      textAlign: TextAlign.start,
+                      style: DefaultTextStyle.of(context).style.apply(
+                        fontSizeFactor: 1.5).copyWith(fontWeight: FontWeight.bold),
+                    ),
+                    Text(getNewsDescription(data), 
+                      textAlign: TextAlign.start,
+                    ),
+                  ],
+                ),
+              ),
+            ]
+          ),
+        ),
+      ),
     );
+  }
+}
+
+final double imageSize = 160.0;
+
+Widget buildNewsImage(data){
+  var url = findNewsImageUrl(data);
+  if(url!=null){
+    // return CachedNetworkImage(
+    //   placeholder: CircularProgressIndicator(),
+    //   imageUrl: url,
+    //   errorWidget: new Icon(Icons.error),
+    // );
+    // return FadeInImage.memoryNetwork(
+    //             placeholder: kTransparentImage,
+    //             image: url,
+    //                // 'https://github.com/flutter/website/blob/master/src/_includes/code/layout/lakes/images/lake.jpg?raw=true',
+    //           );
+    // return Image.network(url, fit: BoxFit.fitWidth,);
+    // print(url);
+    return FadeInImage(
+            placeholder: AssetImage('assets/images/loading.gif'),
+            image: NetworkImageWithRetry(url),
+            fit: BoxFit.fitWidth,
+          );
+  }else{
+    return Icon(Icons.photo_camera, size: imageSize);
   }
 }

@@ -26,3 +26,11 @@ class NewsRefreshAction {
 
 }
 
+// class NewsSaveScrollPositionAction {
+//   final double _position;
+
+//   NewsSaveScrollPositionAction(this._position);
+
+//   double get position => _position;
+// }
+

@@ -2,12 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:xcpilots/data/translation.dart';
 import 'package:xcpilots/widgets/news_ui.dart';
 
-class NewsPage extends StatefulWidget {
-  @override
-  _NewsPageState createState() => new _NewsPageState();
-}
-
-class _NewsPageState extends State<NewsPage> {
+class NewsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
@@ -16,9 +11,12 @@ class _NewsPageState extends State<NewsPage> {
         title: Text(translate('news_page_title')),
         actions: <Widget>[
           IconButton(
-            icon: Icon(Icons.arrow_back),
+            icon: Icon(Icons.home),
             onPressed: () {
-              Navigator.pop(context);
+              String route = '/';
+              // Navigator.pushNamed(context, route);
+              Navigator.popUntil(context, ModalRoute.withName(route));
+              // Navigator.pop(context);
             },
           )
         ],

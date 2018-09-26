@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:xcpilots/data/XcPilotsApi.dart';
-import 'package:xcpilots/widgets/NewsCard.dart';
+import 'package:xcpilots/widgets/news_ui.dart';
 
 typedef Widget EmptyWidgetBuilder();
 typedef Widget DivanListRowBuilder(Map row, int index);

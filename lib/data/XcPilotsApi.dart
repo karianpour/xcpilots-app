@@ -2,8 +2,6 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
-import 'package:xcpilots/data/mock/news.dart';
-
 //import 'package:xcpilots/data/mock/news.dart';
 
 Function getPicturesBaseUrl = () => 'http://api.iranxc.ir';
@@ -24,10 +22,10 @@ class XcPilotsApi {
 
   Future<List> fetchNewsData({String modelName, String before}) async{
 
-    return [
-      sampleNews,
-      sampleNews,
-    ];
+    // return [
+    //   sampleNews(),
+    //   sampleNews(),
+    // ];
 
     // 'news?filter=%7B%22order%22%3A%20%22created_at%20DESC%22%2C%20%22limit%22%3A%203%7D';
     // {"order": "created_at DESC", "limit": 3, "where": {"created_at": {"lt": "2018-09-14T18:55:19.729Z"}}}
