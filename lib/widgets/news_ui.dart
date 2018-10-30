@@ -139,14 +139,20 @@ class NewsCard extends StatelessWidget {
                       aspectRatio: 4.0/3.0,
                       child: buildNewsImage(data)
                     ),
-                    Text(
-                      getNewsTitle(data),
-                      textAlign: TextAlign.start,
-                      style: DefaultTextStyle.of(context).style.apply(
-                        fontSizeFactor: 1.5).copyWith(fontWeight: FontWeight.bold),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        getNewsTitle(data),
+                        textAlign: TextAlign.start,
+                        style: DefaultTextStyle.of(context).style.apply(
+                          fontSizeFactor: 1.5).copyWith(fontWeight: FontWeight.bold),
+                      ),
                     ),
-                    Text(getNewsDescription(data), 
-                      textAlign: TextAlign.start,
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(getNewsDescription(data), 
+                        textAlign: TextAlign.start,
+                      ),
                     ),
                   ],
                 ),

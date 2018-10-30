@@ -54,15 +54,24 @@ _buildView(BuildContext context, Map data, String newsId){
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
                   buildNewsImage(data),
-                  Text(
-                    getNewsTitle(data),
-                    textAlign: TextAlign.start,
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(
+                      getNewsTitle(data),
+                      textAlign: TextAlign.start,
+                    ),
                   ),
-                  Text(getNewsBody(data), 
-                    textAlign: TextAlign.start,
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(getNewsBody(data), 
+                      textAlign: TextAlign.start,
+                    ),
                   ),
-                  Text(getNewsTime(data), 
-                    textAlign: TextAlign.end,
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(getNewsTime(data), 
+                      textAlign: TextAlign.end,
+                    ),
                   ),
                 ],
               ),

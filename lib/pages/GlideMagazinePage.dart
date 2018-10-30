@@ -11,9 +11,12 @@ class GlideMagazinePage extends StatelessWidget {
         title: Text(translate('glide_magazin')),
         actions: <Widget>[
           IconButton(
-            icon: Icon(Icons.arrow_back),
+            icon: Icon(Icons.home),
             onPressed: () {
-              Navigator.pop(context);
+              String route = '/';
+              // Navigator.pushNamed(context, route);
+              Navigator.popUntil(context, ModalRoute.withName(route));
+              // Navigator.pop(context);
             },
           )
         ],

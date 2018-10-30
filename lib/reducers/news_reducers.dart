@@ -7,7 +7,7 @@ Map<String, dynamic> fetchingNews(Map<String, dynamic> state, NewsFetchingMoreRo
   newState['news'] = newNews;
 
   newNews['fetching'] = action.fetching;
-  newNews['lastTimefailed'] = false;
+  newNews['lastTimeFailed'] = false;
 
   return newState;
 }
@@ -17,7 +17,7 @@ Map<String, dynamic> fetchingNewsFailed(Map<String, dynamic> state, NewsFetching
   Map<String, dynamic> newNews = new Map<String, dynamic>.from(newState['news'] ?? {});
   newState['news'] = newNews;
 
-  newNews['lastTimefailed'] = true;
+  newNews['lastTimeFailed'] = true;
 
   return newState;
 }
@@ -27,7 +27,7 @@ Map<String, dynamic> fetchingNewsSucceed(Map<String, dynamic> state, NewsFetchin
   Map<String, dynamic> newNews = new Map<String, dynamic>.from(newState['news'] ?? {});
   newState['news'] = newNews;
 
-  newNews['lastTimefailed'] = false;
+  newNews['lastTimeFailed'] = false;
 
   int _lastRowIndex = newNews['lastRowIndex'];
   Map<String, dynamic> rows = new Map<String, dynamic>.from(newNews['rows']);

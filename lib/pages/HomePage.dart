@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter_image/network.dart';
+import 'package:flutter_redux/flutter_redux.dart';
+import 'package:xcpilots/models/app_state.dart';
 import 'package:xcpilots/XcPilotsTheme.dart';
 import 'package:xcpilots/data/translation.dart';
+import 'package:xcpilots/models/background_model.dart';
 
 class HomePage extends StatelessWidget {
 
@@ -21,36 +25,39 @@ class HomePage extends StatelessWidget {
 
 _dashboard(BuildContext context) {
   final mediaQueryData = MediaQuery.of(context);
-  final double topPadding = mediaQueryData.size.height > 600 ? mediaQueryData.size.height - 600 : 0;
+  final double topPadding = mediaQueryData.size.height > 400 ? mediaQueryData.size.height - 400 : 0;
 //  const double imagePadding = 80.0; //mediaQueryData.size.width / 4;
-  return Container(
-    constraints: BoxConstraints.expand(),
-    decoration: BoxDecoration(
-      image:
-          DecorationImage(
-            image: AssetImage('assets/images/xcpilots_bg.jpeg'),
-            fit: BoxFit.cover
-          ),
-    ),
-    child: SingleChildScrollView(
-      physics: const AlwaysScrollableScrollPhysics(),
-      child: Column(
-        children: <Widget>[
-          Container(
-            height: topPadding,
-          ),
-          FractionallySizedBox(
-            widthFactor: 0.5,
-            child: Image(image: AssetImage('assets/images/XcBowo.jpg'), fit: BoxFit.fitWidth,),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(top: 8.0, bottom: 10.0),
-            child: HomeOptions(),
-          ),
-        ],
-      ),
-    ),
-  );
+    return StoreConnector<AppState, Map>(
+    		// Build a viewModel, as usual:
+        converter: backgroundFromStore('home'),
+        builder: (BuildContext context, Map vm) {
+          String backgroundUrl = vm['backgroundUrl']();
+
+          return Container(
+            constraints: BoxConstraints.expand(),
+            decoration: backgroundUrl == null ? null : BoxDecoration(
+              image:
+                  DecorationImage(
+                    image: NetworkImageWithRetry(backgroundUrl), //AssetImage('assets/images/xcpilots_bg.jpeg'),
+                    fit: BoxFit.cover
+                  ),
+            ),
+            child: SingleChildScrollView(
+              physics: const AlwaysScrollableScrollPhysics(),
+              child: Column(
+                children: <Widget>[
+                  Container(
+                    height: topPadding,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8.0, bottom: 10.0),
+                    child: HomeOptions(),
+                  ),
+                ],
+              ),
+            ),
+          );
+        });
 }
 
 class HomeOptions extends StatelessWidget {
@@ -70,7 +77,7 @@ class HomeOptions extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
-              DashboardOption(title: translate('news'), route: '/news', image: 'iranxc_news.jpeg'),
+              DashboardOption(title: translate('news'), route: '/news'),
               DashboardOption(title: translate('glide'), route: '/glide_magazine'),
               DashboardOption(title: translate('radio_paraglider'), route: '/radio_paraglider'),
               DashboardOption(title: translate('iranxc'), route: '/iran_xc'),
@@ -83,7 +90,7 @@ class HomeOptions extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
-              DashboardOption(title: translate('flights_hightligh'), route: '/flights_highlight'),
+              DashboardOption(title: translate('flights_hightlight'), route: '/flights_highlight'),
               DashboardOption(title: translate('about_us'), route: '/about_us'),
             ],
           ),

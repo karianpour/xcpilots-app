@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:redux_persist/redux_persist.dart';
-import 'package:xcpilots/middlewares/new_middleware.dart';
+import 'package:xcpilots/middlewares/background_middlewares.dart';
+import 'package:xcpilots/middlewares/news_middleware.dart';
 import 'package:xcpilots/reducers/app_reducers.dart';
 import 'package:xcpilots/models/app_state.dart';
 import 'package:xcpilots/data/translation.dart';
@@ -31,6 +32,7 @@ class XcPilotsApp extends StatelessWidget {
 
   XcPilotsApp(){
     persistor = Persistor<AppState>(
+      debug: true,
       storage: FlutterStorage("xcpilots"),
       decoder: AppState.fromJson,
     );
@@ -38,12 +40,22 @@ class XcPilotsApp extends StatelessWidget {
       appReducer,
       initialState: new AppState(),
       middleware: [persistor.createMiddleware()]
-        ..addAll(createNewsMiddlewares()),
+        ..addAll(createNewsMiddlewares())
+        ..addAll(createBackgroundMiddlewares())
+        ,
     );
 
-    persistor.load(store);
+    load(store);
   }
 
+  Future<AppState> load(Store<AppState> store) async {
+    try{
+      return await persistor.load(store);
+    }catch(err){
+      return null;
+    }
+  } 
+  
   @override
   Widget build(BuildContext context) {
     return PersistorGate(
@@ -80,7 +92,7 @@ Widget createMaterial(){
     },
     initialRoute: '/',
     home: HomePage(),
-    routes: XcPilotsRoutes,
+    routes: xcPilotsRoutes,
     onGenerateRoute: App.router.generator,
   );
 }

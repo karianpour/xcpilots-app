@@ -8,7 +8,7 @@ import 'package:xcpilots/pages/SingleNewsPage.dart';
 import 'package:flutter/material.dart';
 import 'package:fluro/fluro.dart';
 
-final Map<String, WidgetBuilder> XcPilotsRoutes = {
+final Map<String, WidgetBuilder> xcPilotsRoutes = {
   '/news': (context) => NewsPage(),
   '/about_us': (context) => AboutUsPage(),
   '/flights_highlight': (context) => FlightsHighlightPage(),
