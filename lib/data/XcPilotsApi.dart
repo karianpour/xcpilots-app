@@ -67,7 +67,7 @@ class XcPilotsApi {
 
     Map filter = {
       "order": "created_at DESC", 
-      "limit": 3      
+      "limit": 10
     };
 
     if(before!=null){

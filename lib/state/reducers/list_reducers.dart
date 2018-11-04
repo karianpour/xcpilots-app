@@ -3,34 +3,34 @@ import 'package:xcpilots/state/actions/list_actions.dart';
 
 Map<String, dynamic> fetchingList(Map<String, dynamic> state, ListFetchingMoreRowsAction action){
   Map<String, dynamic> newState = new Map<String, dynamic>.from(state);
-  Map<String, dynamic> newNews = new Map<String, dynamic>.from(newState['news'] ?? {});
-  newState['news'] = newNews;
+  Map<String, dynamic> newList = new Map<String, dynamic>.from(newState[action.modelName] ?? {});
+  newState[action.modelName] = newList;
 
-  newNews['fetching'] = action.fetching;
-  newNews['lastTimeFailed'] = false;
+  newList['fetching'] = action.fetching;
+  newList['lastTimeFailed'] = false;
 
   return newState;
 }
 
 Map<String, dynamic> fetchingListFailed(Map<String, dynamic> state, ListFetchingMoreRowsFailedAction action){
   Map<String, dynamic> newState = new Map<String, dynamic>.from(state);
-  Map<String, dynamic> newNews = new Map<String, dynamic>.from(newState['news'] ?? {});
-  newState['news'] = newNews;
+  Map<String, dynamic> newList = new Map<String, dynamic>.from(newState[action.modelName] ?? {});
+  newState[action.modelName] = newList;
 
-  newNews['lastTimeFailed'] = true;
+  newList['lastTimeFailed'] = true;
 
   return newState;
 }
 
 Map<String, dynamic> fetchingListSucceed(Map<String, dynamic> state, ListFetchingMoreRowsSucceedAction action){
   Map<String, dynamic> newState = new Map<String, dynamic>.from(state);
-  Map<String, dynamic> newNews = new Map<String, dynamic>.from(newState['news'] ?? {});
-  newState['news'] = newNews;
+  Map<String, dynamic> newList = new Map<String, dynamic>.from(newState[action.modelName] ?? {});
+  newState[action.modelName] = newList;
 
-  newNews['lastTimeFailed'] = false;
+  newList['lastTimeFailed'] = false;
 
-  int _lastRowIndex = newNews['lastRowIndex'];
-  Map<String, dynamic> rows = new Map<String, dynamic>.from(newNews['rows']);
+  int _lastRowIndex = newList['lastRowIndex'];
+  Map<String, dynamic> rows = new Map<String, dynamic>.from(newList['rows']);
 
   if(action.rows.length>0){
     var newDataStartIndex = _lastRowIndex==null ? 0 : _lastRowIndex + 1;
@@ -39,12 +39,12 @@ Map<String, dynamic> fetchingListSucceed(Map<String, dynamic> state, ListFetchin
        final Map row = action.rows[i];
        rows[(newDataStartIndex + i).toString()] = row;
     }
-    newNews['rows'] = rows;
-    newNews['lastRowIndex'] = _lastRowIndex;
-    newNews['rowQty'] = _lastRowIndex + 1 + 1;
+    newList['rows'] = rows;
+    newList['lastRowIndex'] = _lastRowIndex;
+    newList['rowQty'] = _lastRowIndex + 1 + 1;
   }else{
-    newNews['noRowAvailable'] = true;
-    newNews['rowQty'] = _lastRowIndex + 1;
+    newList['noRowAvailable'] = true;
+    newList['rowQty'] = _lastRowIndex + 1;
   }
 
   return newState;
@@ -57,7 +57,7 @@ Map<String, dynamic> fetchList(Map<String, dynamic> state, ListFetchMoreRowsActi
 Map<String, dynamic> refreshList(Map<String, dynamic> state, ListRefreshAction action){
   Map<String, dynamic> newState = new Map<String, dynamic>.from(state);
 
-  Map<String, dynamic> newNews = {
+  Map<String, dynamic> newList = {
     'rowQty': 0,
     'noRowAvailable': false,
     'lastTimeFailed': false,
@@ -68,17 +68,17 @@ Map<String, dynamic> refreshList(Map<String, dynamic> state, ListRefreshAction a
     'refreshTime': DateTime.now().millisecondsSinceEpoch,
   };
 
-  newState['news'] = newNews;
+  newState[action.modelName] = newList;
 
   return newState;
 }
 
 // Map saveScrollPosition(Map state, ListSaveScrollPositionAction action){
 //  Map newState = new Map.from(state);
-//  Map newNews = new Map.from(newState['news'] ?? {});
-//  newState['news'] = newNews;
+//  Map newList = new Map.from(newState[action.modelName] ?? {});
+//  newState[action.modelName] = newList;
 
-//   newNews['scrollPosition'] = action.position;
+//   newList['scrollPosition'] = action.position;
 
 //   return newState;
 // }
