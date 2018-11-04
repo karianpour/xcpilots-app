@@ -1,10 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:xcpilots/models/app_state.dart';
+import 'package:xcpilots/state/models/app_state.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_image/network.dart';
-import 'package:xcpilots/models/news_model.dart';  
+import 'package:xcpilots/state/models/list_model.dart';
+import 'package:xcpilots/state/models/news_model.dart';
 
 class NewsList extends StatelessWidget {
 
@@ -16,7 +17,7 @@ class NewsList extends StatelessWidget {
   //   });
   // }
 
-  Map _getRowData(NewsListModel vm, int index){
+  Map _getRowData(ListModel vm, int index){
     Map row = vm.rows[index.toString()];
     if(row == null){
       vm.rows[index.toString()] = {'loading': true};
@@ -26,7 +27,7 @@ class NewsList extends StatelessWidget {
   }
 
 
-  Widget _buildList(NewsListModel vm){
+  Widget _buildList(ListModel vm){
     return NotificationListener(
       onNotification: (notifiction){
         if(notifiction is ScrollNotification){
@@ -47,7 +48,7 @@ class NewsList extends StatelessWidget {
     );
   }
 
-  Widget _buildLoading(NewsListModel vm){
+  Widget _buildLoading(ListModel vm){
     if(vm!=null) vm.fetchMoreRows();
     return const Center(
         child: const CupertinoActivityIndicator(),
@@ -60,7 +61,7 @@ class NewsList extends StatelessWidget {
     );
   }
 
-  Widget _firstPageFailed(NewsListModel vm){
+  Widget _firstPageFailed(ListModel vm){
     return RefreshIndicator(
       child: Center(
         child: Column(
@@ -80,10 +81,10 @@ class NewsList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return StoreConnector<AppState, NewsListModel>(
+    return StoreConnector<AppState, ListModel>(
     		// Build a viewModel, as usual:
-        converter: NewsListModel.fromStore,
-        builder: (BuildContext context, NewsListModel vm) {
+        converter: ListModel.listFromStore('news'),
+        builder: (BuildContext context, ListModel vm) {
 
           if(vm==null){
             return _buildLoading(vm);

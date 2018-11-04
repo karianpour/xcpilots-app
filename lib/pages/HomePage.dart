@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_image/network.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:xcpilots/models/app_state.dart';
+import 'package:xcpilots/state/models/app_state.dart';
 import 'package:xcpilots/XcPilotsTheme.dart';
 import 'package:xcpilots/data/translation.dart';
-import 'package:xcpilots/models/background_model.dart';
+import 'package:xcpilots/state/models/background_model.dart';
 
 class HomePage extends StatelessWidget {
 
@@ -25,7 +25,7 @@ class HomePage extends StatelessWidget {
 
 _dashboard(BuildContext context) {
   final mediaQueryData = MediaQuery.of(context);
-  final double topPadding = mediaQueryData.size.height > 400 ? mediaQueryData.size.height - 400 : 0;
+  final double topPadding = mediaQueryData.size.height > 350 ? mediaQueryData.size.height - 350 : 0;
 //  const double imagePadding = 80.0; //mediaQueryData.size.width / 4;
     return StoreConnector<AppState, Map>(
     		// Build a viewModel, as usual:

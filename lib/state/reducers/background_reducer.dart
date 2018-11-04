@@ -1,5 +1,5 @@
-import 'package:xcpilots/actions/background_actions.dart';
-import 'package:xcpilots/models/news_model.dart';
+import 'package:xcpilots/state/actions/background_actions.dart';
+import 'package:xcpilots/state/models/news_model.dart';
 
 Map<String, dynamic> fetchBackground(Map<String, dynamic> state, FetchBackgroundAction action){
   return state;
@@ -30,6 +30,7 @@ Map<String, dynamic> fetchingBackground(Map<String, dynamic> state, BackgroundFe
 
   newSection['fetching'] = action.fetching;
   newSection['lastTimeFailed'] = false;
+  newSection['lastTime'] = DateTime.now().millisecondsSinceEpoch;
 
   return newState;
 }

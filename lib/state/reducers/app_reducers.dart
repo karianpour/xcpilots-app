@@ -1,9 +1,9 @@
 import 'package:redux_persist/redux_persist.dart';
-import 'package:xcpilots/actions/background_actions.dart';
-import 'package:xcpilots/actions/news_actions.dart';
-import 'package:xcpilots/models/app_state.dart';
-import 'package:xcpilots/reducers/news_reducers.dart';
-import 'package:xcpilots/reducers/background_reducer.dart';
+import 'package:xcpilots/state/actions/background_actions.dart';
+import 'package:xcpilots/state/actions/list_actions.dart';
+import 'package:xcpilots/state/models/app_state.dart';
+import 'package:xcpilots/state/reducers/list_reducers.dart';
+import 'package:xcpilots/state/reducers/background_reducer.dart';
 
 AppState appReducer(AppState state, action) {
   return new AppState(
@@ -11,22 +11,22 @@ AppState appReducer(AppState state, action) {
   );
 }
 
-doAction(Map state, action){
+Map<String, dynamic> doAction(Map state, action){
   if (action is PersistLoadedAction<AppState>) {
     // Load to state
     return action.state !=null ? action.state.state : state;
   }else if(action is PersistErrorAction){
-    return {};
-  }else if(action is NewsFetchMoreRowsAction){
-    return fetchNews(state, action);
-  }else if(action is NewsFetchingMoreRowsAction){
-    return fetchingNews(state, action);
-  }else if(action is NewsFetchingMoreRowsFailedAction){
-    return fetchingNewsFailed(state, action);
-  }else if(action is NewsFetchingMoreRowsSucceedAction){
-    return fetchingNewsSucceed(state, action);
-  }else if(action is NewsRefreshAction){
-    return refreshNews(state, action);
+    return <String, dynamic>{};
+  }else if(action is ListFetchMoreRowsAction){
+    return fetchList(state, action);
+  }else if(action is ListFetchingMoreRowsAction){
+    return fetchingList(state, action);
+  }else if(action is ListFetchingMoreRowsFailedAction){
+    return fetchingListFailed(state, action);
+  }else if(action is ListFetchingMoreRowsSucceedAction){
+    return fetchingListSucceed(state, action);
+  }else if(action is ListRefreshAction){
+    return refreshList(state, action);
   // }else if(action is NewsSaveScrollPositionAction){
   //   return saveScrollPosition(state, action);
   }else if(action is RefreshBackgroundAction){

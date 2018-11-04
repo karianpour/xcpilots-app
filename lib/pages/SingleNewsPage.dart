@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:xcpilots/data/translation.dart';
-import 'package:xcpilots/models/app_state.dart';
-import 'package:xcpilots/models/news_model.dart';
+import 'package:xcpilots/state/models/app_state.dart';
+import 'package:xcpilots/state/models/news_model.dart';
+import 'package:xcpilots/state/models/list_model.dart';
 import 'package:xcpilots/widgets/news_ui.dart';
 
 class SingleNewsPage extends StatelessWidget {
@@ -13,7 +14,7 @@ class SingleNewsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return StoreConnector<AppState, Map>(
-        converter: newsFromStore(newsId),
+        converter: itemFromStore('news', newsId),
         builder: (BuildContext context, Map data) {
           return Scaffold(
           appBar: AppBar(

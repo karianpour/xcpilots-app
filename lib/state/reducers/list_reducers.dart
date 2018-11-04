@@ -1,7 +1,7 @@
-import 'package:xcpilots/actions/news_actions.dart';
+import 'package:xcpilots/state/actions/list_actions.dart';
 
 
-Map<String, dynamic> fetchingNews(Map<String, dynamic> state, NewsFetchingMoreRowsAction action){
+Map<String, dynamic> fetchingList(Map<String, dynamic> state, ListFetchingMoreRowsAction action){
   Map<String, dynamic> newState = new Map<String, dynamic>.from(state);
   Map<String, dynamic> newNews = new Map<String, dynamic>.from(newState['news'] ?? {});
   newState['news'] = newNews;
@@ -12,7 +12,7 @@ Map<String, dynamic> fetchingNews(Map<String, dynamic> state, NewsFetchingMoreRo
   return newState;
 }
 
-Map<String, dynamic> fetchingNewsFailed(Map<String, dynamic> state, NewsFetchingMoreRowsFailedAction action){
+Map<String, dynamic> fetchingListFailed(Map<String, dynamic> state, ListFetchingMoreRowsFailedAction action){
   Map<String, dynamic> newState = new Map<String, dynamic>.from(state);
   Map<String, dynamic> newNews = new Map<String, dynamic>.from(newState['news'] ?? {});
   newState['news'] = newNews;
@@ -22,7 +22,7 @@ Map<String, dynamic> fetchingNewsFailed(Map<String, dynamic> state, NewsFetching
   return newState;
 }
 
-Map<String, dynamic> fetchingNewsSucceed(Map<String, dynamic> state, NewsFetchingMoreRowsSucceedAction action){
+Map<String, dynamic> fetchingListSucceed(Map<String, dynamic> state, ListFetchingMoreRowsSucceedAction action){
   Map<String, dynamic> newState = new Map<String, dynamic>.from(state);
   Map<String, dynamic> newNews = new Map<String, dynamic>.from(newState['news'] ?? {});
   newState['news'] = newNews;
@@ -50,15 +50,11 @@ Map<String, dynamic> fetchingNewsSucceed(Map<String, dynamic> state, NewsFetchin
   return newState;
 }
 
-Map<String, dynamic> fetchNews(Map<String, dynamic> state, NewsFetchMoreRowsAction action){
-  //Map newState = new Map.from(state);
-
-  //newState['news']['list'] = ;
-
+Map<String, dynamic> fetchList(Map<String, dynamic> state, ListFetchMoreRowsAction action){
   return state;
 }
 
-Map<String, dynamic> refreshNews(Map<String, dynamic> state, NewsRefreshAction action){
+Map<String, dynamic> refreshList(Map<String, dynamic> state, ListRefreshAction action){
   Map<String, dynamic> newState = new Map<String, dynamic>.from(state);
 
   Map<String, dynamic> newNews = {
@@ -69,6 +65,7 @@ Map<String, dynamic> refreshNews(Map<String, dynamic> state, NewsRefreshAction a
     'rows': <String, dynamic>{},
     'fetching': false,
     'scrollPosition': 0.0,
+    'refreshTime': DateTime.now().millisecondsSinceEpoch,
   };
 
   newState['news'] = newNews;
@@ -76,7 +73,7 @@ Map<String, dynamic> refreshNews(Map<String, dynamic> state, NewsRefreshAction a
   return newState;
 }
 
-// Map saveScrollPosition(Map state, NewsSaveScrollPositionAction action){
+// Map saveScrollPosition(Map state, ListSaveScrollPositionAction action){
 //  Map newState = new Map.from(state);
 //  Map newNews = new Map.from(newState['news'] ?? {});
 //  newState['news'] = newNews;

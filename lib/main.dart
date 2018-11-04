@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:redux_persist/redux_persist.dart';
-import 'package:xcpilots/middlewares/background_middlewares.dart';
-import 'package:xcpilots/middlewares/news_middleware.dart';
-import 'package:xcpilots/reducers/app_reducers.dart';
-import 'package:xcpilots/models/app_state.dart';
+import 'package:xcpilots/state/middlewares/background_middlewares.dart';
+import 'package:xcpilots/state/middlewares/list_middleware.dart';
+import 'package:xcpilots/state/reducers/app_reducers.dart';
+import 'package:xcpilots/state/models/app_state.dart';
 import 'package:xcpilots/data/translation.dart';
 import 'package:xcpilots/pages/HomePage.dart';
 import 'package:fluro/fluro.dart';
@@ -40,7 +40,7 @@ class XcPilotsApp extends StatelessWidget {
       appReducer,
       initialState: new AppState(),
       middleware: [persistor.createMiddleware()]
-        ..addAll(createNewsMiddlewares())
+        ..addAll(createListMiddlewares())
         ..addAll(createBackgroundMiddlewares())
         ,
     );
