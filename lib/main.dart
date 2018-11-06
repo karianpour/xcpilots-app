@@ -36,9 +36,9 @@ class XcPilotsApp extends StatelessWidget {
       storage: FlutterStorage("xcpilots"),
       decoder: AppState.fromJson,
     );
-    store = new Store<AppState>(
+    store = Store<AppState>(
       appReducer,
-      initialState: new AppState(),
+      initialState: AppState(),
       middleware: [persistor.createMiddleware()]
         ..addAll(createListMiddlewares())
         ..addAll(createBackgroundMiddlewares())

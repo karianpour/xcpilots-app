@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter_image/network.dart';
+//import 'package:flutter_image/network.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:xcpilots/state/models/app_state.dart';
 import 'package:xcpilots/XcPilotsTheme.dart';
@@ -38,7 +39,8 @@ _dashboard(BuildContext context) {
             decoration: backgroundUrl == null ? null : BoxDecoration(
               image:
                   DecorationImage(
-                    image: NetworkImageWithRetry(backgroundUrl), //AssetImage('assets/images/xcpilots_bg.jpeg'),
+                    //image: NetworkImageWithRetry(backgroundUrl), //AssetImage('assets/images/xcpilots_bg.jpeg'),
+                    image: CachedNetworkImageProvider(backgroundUrl),
                     fit: BoxFit.cover
                   ),
             ),

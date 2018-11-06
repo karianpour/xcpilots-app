@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
@@ -183,9 +184,14 @@ Widget buildNewsImage(data){
     //           );
     // return Image.network(url, fit: BoxFit.fitWidth,);
     // print(url);
+    // return FadeInImage(
+    //         placeholder: AssetImage('assets/images/loading.gif'),
+    //         image: NetworkImageWithRetry(url),
+    //         fit: BoxFit.fitWidth,
+    //       );
     return FadeInImage(
             placeholder: AssetImage('assets/images/loading.gif'),
-            image: NetworkImageWithRetry(url),
+            image: CachedNetworkImageProvider(url),
             fit: BoxFit.fitWidth,
           );
   }else{
