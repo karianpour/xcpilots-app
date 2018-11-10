@@ -1,7 +1,6 @@
 import 'package:xcpilots/pages/AboutUsPage.dart';
 import 'package:xcpilots/pages/FlightsHightlightPage.dart';
 import 'package:xcpilots/pages/GlideMagazinePage.dart';
-import 'package:xcpilots/pages/IranXcPage.dart';
 import 'package:xcpilots/pages/NewsPage.dart';
 import 'package:xcpilots/pages/RadioParagliderPage.dart';
 import 'package:xcpilots/pages/SingleNewsPage.dart';
