@@ -26,7 +26,7 @@ class HomePage extends StatelessWidget {
 
 _dashboard(BuildContext context) {
   final mediaQueryData = MediaQuery.of(context);
-  final double topPadding = mediaQueryData.size.height > 350 ? mediaQueryData.size.height - 350 : 0;
+  final double topPadding = mediaQueryData.size.height > 280 ? mediaQueryData.size.height - 280 : 0;
 //  const double imagePadding = 80.0; //mediaQueryData.size.width / 4;
     return StoreConnector<AppState, Map>(
     		// Build a viewModel, as usual:

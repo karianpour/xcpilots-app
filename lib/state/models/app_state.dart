@@ -12,7 +12,7 @@ class AppState {
 
   static AppState fromJson(dynamic json) {
       sanitizeLists(json);
-      AppState(state: json);
+      return AppState(state: json);
   }
 
   static dynamic sanitizeLists(dynamic state) {
