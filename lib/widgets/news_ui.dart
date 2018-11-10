@@ -4,9 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:xcpilots/state/models/app_state.dart';
 import 'package:flutter/widgets.dart';
-import 'package:flutter_image/network.dart';
 import 'package:xcpilots/state/models/list_model.dart';
 import 'package:xcpilots/state/models/news_model.dart';
+import 'package:connectivity/connectivity.dart';
 
 class NewsList extends StatelessWidget {
 
@@ -50,7 +50,7 @@ class NewsList extends StatelessWidget {
   }
 
   Widget _buildLoading(ListModel vm){
-    if(vm!=null) vm.fetchMoreRows();
+    //if(vm!=null) vm.fetchMoreRows();
     return const Center(
         child: const CupertinoActivityIndicator(),
     );
@@ -87,9 +87,9 @@ class NewsList extends StatelessWidget {
         converter: ListModel.listFromStore('news'),
         builder: (BuildContext context, ListModel vm) {
 
-          if(vm==null){
-            return _buildLoading(vm);
-          }
+          // if(vm==null){
+          //   return _buildLoading(vm);
+          // }
 
           if(vm.rowQty==0){
             if(vm.lastTimeFailed)
@@ -99,16 +99,29 @@ class NewsList extends StatelessWidget {
             else
               return _buildLoading(vm);
           }
-          return new RefreshIndicator(
+          return RefreshIndicator(
             child: SafeArea(
                 child: _buildList(vm),
             ),
-            onRefresh: vm.refresh,
+            onRefresh: tryToRefresh(vm),
           );
 
 
         });
   }
+}
+
+Function tryToRefresh(ListModel vm) {
+  return () async {
+    try{
+      var connectivityResult = await (Connectivity().checkConnectivity());
+      if (connectivityResult == ConnectivityResult.mobile || connectivityResult == ConnectivityResult.wifi) {
+          vm.refresh();
+      }
+    }catch(err){
+
+    }
+  };
 }
 
 class NewsCard extends StatelessWidget {

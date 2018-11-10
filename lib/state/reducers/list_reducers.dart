@@ -29,8 +29,8 @@ Map<String, dynamic> fetchingListSucceed(Map<String, dynamic> state, ListFetchin
 
   newList['lastTimeFailed'] = false;
 
-  int _lastRowIndex = newList['lastRowIndex'];
-  Map<String, dynamic> rows = new Map<String, dynamic>.from(newList['rows']);
+  int _lastRowIndex = action.firstFetch ? null : newList['lastRowIndex'];
+  Map<String, dynamic> rows = action.firstFetch ? Map<String, dynamic>() : Map<String, dynamic>.from(newList['rows']);
 
   if(action.rows.length>0){
     var newDataStartIndex = _lastRowIndex==null ? 0 : _lastRowIndex + 1;
@@ -51,6 +51,7 @@ Map<String, dynamic> fetchingListSucceed(Map<String, dynamic> state, ListFetchin
 }
 
 Map<String, dynamic> fetchList(Map<String, dynamic> state, ListFetchMoreRowsAction action){
+  state[action.modelName]['refreshTime'] = DateTime.now().millisecondsSinceEpoch;
   return state;
 }
 

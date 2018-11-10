@@ -41,16 +41,17 @@ class XcPilotsApi {
 
     try{
       final response = await http.get(url, 
-        headers: {HttpHeaders.authorizationHeader: authentication});
+        headers: {HttpHeaders.authorizationHeader: authentication})
+        .timeout(const Duration(seconds: 30));
       if(response.statusCode == HttpStatus.ok){
         return json.decode(response.body);
       }else{
         print(response);
-        throw new Error();//todo
+        throw Exception('could not load background data');
       }
     }catch (e) {
       print(e);
-      throw new Error();//todo
+      throw Exception('exception occured while fetching background data');
     }
   }
 
@@ -89,16 +90,17 @@ class XcPilotsApi {
 
     try{
       final response = await http.get(url, 
-        headers: {HttpHeaders.authorizationHeader: authentication});
+        //headers: {HttpHeaders.authorizationHeader: authentication}
+        ).timeout(const Duration(seconds: 30));
       if(response.statusCode == HttpStatus.ok){
         return json.decode(response.body);
       }else{
         print(response);
-        throw new Error();//todo
+        throw Exception('could not load news data');
       }
     }catch (e) {
       print(e);
-      throw new Error();//todo
+      throw Exception('exception occured while fetching news data from the server.');
     }
   }
 }

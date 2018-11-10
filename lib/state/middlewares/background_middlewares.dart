@@ -16,6 +16,7 @@ Middleware<AppState> _fetchBackground(){
       if(state['background'][action.section] != null) {
         if(state['background'][action.section]['fetching'] != null){
           if(state['background'][action.section]['fetching']){
+            print('no fetching');
             return;
           }
         } 

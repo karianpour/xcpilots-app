@@ -52,7 +52,8 @@ class XcPilotsApp extends StatelessWidget {
     try{
       return await persistor.load(store);
     }catch(err){
-      return null;
+      await persistor.save(store);
+      return await persistor.load(store);
     }
   } 
   

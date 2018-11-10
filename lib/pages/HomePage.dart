@@ -82,7 +82,6 @@ class HomeOptions extends StatelessWidget {
               DashboardOption(title: translate('news'), route: '/news'),
               DashboardOption(title: translate('glide'), route: '/glide_magazine'),
               DashboardOption(title: translate('radio_paraglider'), route: '/radio_paraglider'),
-              DashboardOption(title: translate('iranxc'), route: '/iran_xc'),
             ],
           ),
         ),

@@ -9,7 +9,7 @@ import 'package:xcpilots/state/models/app_state.dart';
 typedef void SaveScrollPosition(double position);
 
 int counter = 0;
-const int REFRESH_TIMEOUT = 5 * 60 * 60 * 1000;
+const int REFRESH_TIMEOUT = 3 * 60 * 1000; // for test i reduced it  5 * 60 * 60 * 1000;
 
 class ListModel {
   final int rowQty;
@@ -34,12 +34,24 @@ class ListModel {
 
   static ListModel fromStore(Store<AppState> store, String modelName){
     counter++;
-    print(counter);
+    print("counter for ListModel $modelName : $counter");
     Map list = store.state.state[modelName];
 
+    bool needFirstFetch = false;
+
     if(refreshList(list)){
-      store.dispatch(new ListRefreshAction(modelName));
+      store.dispatch(ListRefreshAction(modelName));
       list = store.state.state[modelName];
+      needFirstFetch = true;
+    }
+
+    if(refetchList(list)){
+      needFirstFetch = true;
+     }
+
+    if(needFirstFetch && !list['fetching']){
+      print('refetch fired');
+      store.dispatch(ListFetchMoreRowsAction(modelName, true));
     }
 
     // //todo remove it
@@ -65,7 +77,7 @@ class ListModel {
         store.dispatch(new ListRefreshAction(modelName));
       },
       fetchMoreRows: () {
-        store.dispatch(new ListFetchMoreRowsAction(modelName));
+        store.dispatch(new ListFetchMoreRowsAction(modelName, false));
       },
       saveScrollPosition: (double position) {
         //store.dispatch(new NewsSaveScrollPositionAction(position));
@@ -84,6 +96,10 @@ class ListModel {
       return true;
     }
 
+    return false;
+  }
+
+  static bool refetchList(Map list){
     if(DateTime.now().millisecondsSinceEpoch - list['refreshTime'] > REFRESH_TIMEOUT) {
       print('timeout is passed so refresh it');
       return true;

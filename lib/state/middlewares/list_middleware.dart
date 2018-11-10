@@ -15,13 +15,13 @@ Middleware<AppState> _fetchMoreRows(){
     String modelName = action.modelName;
     if(state[modelName] != null && state[modelName]['fetching']) return;
 
-    store.dispatch(new ListFetchingMoreRowsAction(modelName, true));
+    store.dispatch(ListFetchingMoreRowsAction(modelName, true));
 
     String before;
     Map<String, dynamic> _cachedRows = state[modelName]['rows'];
     int _lastRowIndex = state[modelName]['lastRowIndex'];
 
-    if(_cachedRows != null && _lastRowIndex != null && _lastRowIndex >= 0){
+    if(!action.firstFetch && _cachedRows != null && _lastRowIndex != null && _lastRowIndex >= 0){
       before = _cachedRows[_lastRowIndex.toString()]['created_at'];
       print('fetching before $before');
     }else{
@@ -31,12 +31,12 @@ Middleware<AppState> _fetchMoreRows(){
 
     try{
       List rows = await XcPilotsApi.getInstance().fetchNewsData(modelName: modelName, before: before);
-      store.dispatch(new ListFetchingMoreRowsSucceedAction(modelName, rows));
+      store.dispatch(ListFetchingMoreRowsSucceedAction(modelName, rows, action.firstFetch));
     }catch(error){
-      store.dispatch(new ListFetchingMoreRowsFailedAction(modelName));
+      store.dispatch(ListFetchingMoreRowsFailedAction(modelName));
       print(error);
     } finally {
-      store.dispatch(new ListFetchingMoreRowsAction(modelName, false));
+      store.dispatch(ListFetchingMoreRowsAction(modelName, false));
       print('end fetching');
     }
 

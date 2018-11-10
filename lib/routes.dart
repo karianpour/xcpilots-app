@@ -14,7 +14,6 @@ final Map<String, WidgetBuilder> xcPilotsRoutes = {
   '/flights_highlight': (context) => FlightsHighlightPage(),
   '/radio_paraglider': (context) => RadioParagliderPage(),
   '/glide_magazine': (context) => GlideMagazinePage(),
-  '/iran_xc': (context) => IranXcPage(),
 };
 
 var singleNewsHandler = Handler(

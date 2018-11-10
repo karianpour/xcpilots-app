@@ -2,7 +2,6 @@ Map translations = {
   'glide': 'گلاید',
   'glide_magazin': 'مجله گلاید',
   'radio_paraglider': 'رادیو پاراگلایدر',
-  'iranxc': 'ایران ایکسی',
   'news': 'اخبار',
   'flights_hightlight': 'پروازهای برجسته',
   'about_us': 'درباره ما',

@@ -19,19 +19,23 @@ class ListFetchingMoreRowsFailedAction {
 class ListFetchingMoreRowsSucceedAction {
   final String _modelName;
   final List _rows;
+  final bool _firstFetch;
 
-  ListFetchingMoreRowsSucceedAction(this._modelName, this._rows);
+  ListFetchingMoreRowsSucceedAction(this._modelName, this._rows, this._firstFetch);
 
   List get rows => _rows;
   String get modelName => _modelName;
+  bool get firstFetch => _firstFetch;
 }
 
 class ListFetchMoreRowsAction {
   final String _modelName;
+  final bool _firstFetch;
 
-  ListFetchMoreRowsAction(this._modelName);
+  ListFetchMoreRowsAction(this._modelName, this._firstFetch);
 
   String get modelName => _modelName;
+  bool get firstFetch => _firstFetch;
 }
 
 class ListRefreshAction {
