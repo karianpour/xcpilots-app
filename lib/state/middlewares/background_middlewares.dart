@@ -11,18 +11,6 @@ List<Middleware<AppState>> createBackgroundMiddlewares(){
 
 Middleware<AppState> _fetchBackground(){
   return (Store store, action, NextDispatcher next) async{
-    Map state = store.state.state;
-    if(state['background'] != null){
-      if(state['background'][action.section] != null) {
-        if(state['background'][action.section]['fetching'] != null){
-          if(state['background'][action.section]['fetching']){
-            print('no fetching');
-            return;
-          }
-        } 
-      } 
-    } 
-//todo we have to put also the time and if it is too long we have to try again
     store.dispatch(new BackgroundFetchingAction(action.section, true));
 
     try{

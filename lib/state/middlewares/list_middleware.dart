@@ -13,7 +13,6 @@ Middleware<AppState> _fetchMoreRows(){
   return (Store store, action, NextDispatcher next) async{
     Map state = store.state.state;
     String modelName = action.modelName;
-    if(state[modelName] != null && state[modelName]['fetching']) return;
 
     store.dispatch(ListFetchingMoreRowsAction(modelName, true));
 

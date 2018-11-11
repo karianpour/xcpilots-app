@@ -8,6 +8,7 @@ Map<String, dynamic> fetchingList(Map<String, dynamic> state, ListFetchingMoreRo
 
   newList['fetching'] = action.fetching;
   newList['lastTimeFailed'] = false;
+  newList['refreshTime'] = DateTime.now().millisecondsSinceEpoch;
 
   return newState;
 }
@@ -66,7 +67,6 @@ Map<String, dynamic> refreshList(Map<String, dynamic> state, ListRefreshAction a
     'rows': <String, dynamic>{},
     'fetching': false,
     'scrollPosition': 0.0,
-    'refreshTime': DateTime.now().millisecondsSinceEpoch,
   };
 
   newState[action.modelName] = newList;

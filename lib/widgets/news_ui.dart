@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:xcpilots/state/manager/list_manager.dart';
 import 'package:xcpilots/state/models/app_state.dart';
 import 'package:flutter/widgets.dart';
 import 'package:xcpilots/state/models/list_model.dart';
@@ -22,7 +23,7 @@ class NewsList extends StatelessWidget {
     Map row = vm.rows[index.toString()];
     if(row == null){
       vm.rows[index.toString()] = {'loading': true};
-      vm.fetchMoreRows();
+      vm.fetchMoreRows(false);
     }
     return row;
   }
@@ -86,11 +87,7 @@ class NewsList extends StatelessWidget {
     		// Build a viewModel, as usual:
         converter: ListModel.listFromStore('news'),
         builder: (BuildContext context, ListModel vm) {
-
-          // if(vm==null){
-          //   return _buildLoading(vm);
-          // }
-
+          manageList(vm);
           if(vm.rowQty==0){
             if(vm.lastTimeFailed)
               return _firstPageFailed(vm);

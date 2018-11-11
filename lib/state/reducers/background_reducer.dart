@@ -7,8 +7,8 @@ Map<String, dynamic> fetchBackground(Map<String, dynamic> state, FetchBackground
 }
 
 Map<String, dynamic> refreshBackground(Map<String, dynamic> state, RefreshBackgroundAction action){
-  Map<String, dynamic> newState = new Map<String, dynamic>.from(state);
-  Map<String, dynamic> newBackground = new Map<String, dynamic>.from(newState['background'] ?? {});
+  Map<String, dynamic> newState = Map<String, dynamic>.from(state);
+  Map<String, dynamic> newBackground = Map<String, dynamic>.from(newState['background'] ?? {});
   newState['background'] = newBackground;
 
   Map<String, dynamic> newSection = {
@@ -22,10 +22,10 @@ Map<String, dynamic> refreshBackground(Map<String, dynamic> state, RefreshBackgr
 }
 
 Map<String, dynamic> fetchingBackground(Map<String, dynamic> state, BackgroundFetchingAction action){
-  Map<String, dynamic> newState = new Map<String, dynamic>.from(state);
-  Map<String, dynamic> newBackground = new Map<String, dynamic>.from(newState['background'] ?? {});
+  Map<String, dynamic> newState = Map<String, dynamic>.from(state);
+  Map<String, dynamic> newBackground = Map<String, dynamic>.from(newState['background'] ?? {});
   newState['background'] = newBackground;
-  Map<String, dynamic> newSection = new Map<String, dynamic>.from(newBackground[action.section] ?? {});
+  Map<String, dynamic> newSection = Map<String, dynamic>.from(newBackground[action.section] ?? {});
   newBackground[action.section] = newSection;
   
 
@@ -37,10 +37,10 @@ Map<String, dynamic> fetchingBackground(Map<String, dynamic> state, BackgroundFe
 }
 
 Map<String, dynamic> fetchingBackgroundFailed(Map<String, dynamic> state, BackgroundFetchingFailedAction action){
-  Map<String, dynamic> newState = new Map<String, dynamic>.from(state);
-  Map<String, dynamic> newBackground = new Map<String, dynamic>.from(newState['background'] ?? {});
+  Map<String, dynamic> newState = Map<String, dynamic>.from(state);
+  Map<String, dynamic> newBackground = Map<String, dynamic>.from(newState['background'] ?? {});
   newState['background'] = newBackground;
-  Map<String, dynamic> newSection = new Map<String, dynamic>.from(newBackground[action.section] ?? {});
+  Map<String, dynamic> newSection = Map<String, dynamic>.from(newBackground[action.section] ?? {});
   newBackground[action.section] = newSection;
 
   newSection['lastTimeFailed'] = true;
@@ -49,10 +49,10 @@ Map<String, dynamic> fetchingBackgroundFailed(Map<String, dynamic> state, Backgr
 }
 
 Map<String, dynamic> fetchingBackgroundSucceed(Map<String, dynamic> state, BackgroundFetchingSucceedAction action){
-  Map<String, dynamic> newState = new Map<String, dynamic>.from(state);
-  Map<String, dynamic> newBackground = new Map<String, dynamic>.from(newState['background'] ?? {});
+  Map<String, dynamic> newState = Map<String, dynamic>.from(state);
+  Map<String, dynamic> newBackground = Map<String, dynamic>.from(newState['background'] ?? {});
   newState['background'] = newBackground;
-  Map<String, dynamic> newSection = new Map<String, dynamic>.from(newBackground[action.section] ?? {});
+  Map<String, dynamic> newSection = Map<String, dynamic>.from(newBackground[action.section] ?? {});
   newBackground[action.section] = newSection;
 
   newSection['lastTimeFailed'] = false;

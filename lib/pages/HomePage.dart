@@ -3,6 +3,7 @@ import 'package:flutter/rendering.dart';
 //import 'package:flutter_image/network.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_redux/flutter_redux.dart';
+import 'package:xcpilots/state/manager/background_manager.dart';
 import 'package:xcpilots/state/models/app_state.dart';
 import 'package:xcpilots/XcPilotsTheme.dart';
 import 'package:xcpilots/data/translation.dart';
@@ -32,6 +33,7 @@ _dashboard(BuildContext context) {
     		// Build a viewModel, as usual:
         converter: backgroundFromStore('home'),
         builder: (BuildContext context, Map vm) {
+          manageBackground(vm);
           String backgroundUrl = vm['backgroundUrl']();
 
           return Container(
