@@ -7,7 +7,7 @@ Function getPicturesBaseUrl = () => 'http://api.iranxc.ir';
 
 class XcPilotsApi {
   static XcPilotsApi singleton;
-  static getInstance(){
+  static XcPilotsApi getInstance(){
     if(singleton==null){
       singleton = XcPilotsApi();
     }
@@ -55,7 +55,7 @@ class XcPilotsApi {
   }
 
 
-  Future<List> fetchNewsData({String modelName, String before}) async{
+  Future<List> fetchData({String modelName, String before}) async{
 
     Map filter = {
       "order": "created_at DESC", 
@@ -67,6 +67,50 @@ class XcPilotsApi {
         "created_at": {
           "lt": before
         }
+      };
+    }
+
+    print(json.encode(filter));
+
+    Map<String, dynamic> queryParameters = {
+      'filter': json.encode(filter)
+    };
+    Uri uri = new Uri(scheme: scheme, host: host, pathSegments: [restApi, modelName], queryParameters: queryParameters);
+    var url = uri.toString();
+    print(url);
+
+    try{
+      print('fetching : $url');
+      final response = await http.get(url, 
+        //headers: {HttpHeaders.authorizationHeader: authentication}
+        ).timeout(const Duration(seconds: 30));
+      if(response.statusCode == HttpStatus.ok){
+        return json.decode(response.body);
+      }else{
+        print(response);
+        throw Exception('could not load news data');
+      }
+    }catch (e) {
+      print(e);
+      throw Exception('exception occured while fetching news data from the server.');
+    }
+  }
+
+  Future<List> fetchContentData({String section, String before}) async{
+
+    String modelName = 'content';
+
+    Map filter = {
+      "where": {
+        "section": section
+      },
+      "order": "created_at DESC", 
+      "limit": 100
+    };
+
+    if(before!=null){
+      filter['where']['created_at'] = {
+        "lt": before
       };
     }
 

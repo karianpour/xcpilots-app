@@ -29,7 +29,7 @@ Middleware<AppState> _fetchMoreRows(){
   
 
     try{
-      List rows = await XcPilotsApi.getInstance().fetchNewsData(modelName: modelName, before: before);
+      List rows = await XcPilotsApi.getInstance().fetchData(modelName: modelName, before: before);
       store.dispatch(ListFetchingMoreRowsSucceedAction(modelName, rows, action.firstFetch));
     }catch(error){
       store.dispatch(ListFetchingMoreRowsFailedAction(modelName));

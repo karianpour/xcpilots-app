@@ -7,7 +7,8 @@ import 'package:xcpilots/state/models/app_state.dart';
 import 'package:flutter/widgets.dart';
 import 'package:xcpilots/state/models/list_model.dart';
 import 'package:xcpilots/state/models/news_model.dart';
-import 'package:connectivity/connectivity.dart';
+import 'package:xcpilots/utils.dart';
+import 'package:xcpilots/widgets/ui_utils.dart';
 
 class NewsList extends StatelessWidget {
 
@@ -50,37 +51,6 @@ class NewsList extends StatelessWidget {
     );
   }
 
-  Widget _buildLoading(ListModel vm){
-    //if(vm!=null) vm.fetchMoreRows();
-    return const Center(
-        child: const CupertinoActivityIndicator(),
-    );
-  }
-
-  Widget _buildEmptyPlaceHolder(){
-    return const Center(
-        child: const Text('داده‌ای نیست!'),
-    );
-  }
-
-  Widget _firstPageFailed(ListModel vm){
-    return RefreshIndicator(
-      child: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text('مشکلی در ارتباط با سرور بوجود آمد. مجدد تلاش کنید!'),
-            FlatButton(
-              child: const Text('تلاش مجدد'),
-              onPressed: vm.refresh,
-            )
-          ],
-        )
-      ),
-      onRefresh: vm.refresh,
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return StoreConnector<AppState, ListModel>(
@@ -88,20 +58,19 @@ class NewsList extends StatelessWidget {
         converter: ListModel.listFromStore('news'),
         builder: (BuildContext context, ListModel vm) {
           manageList(vm);
-          if(vm.rowQty==0){
-            if(vm.lastTimeFailed)
-              return _firstPageFailed(vm);
-            else if(vm.noRowAvailable)
-              return _buildEmptyPlaceHolder();
-            else
-              return _buildLoading(vm);
-          }
-          return RefreshIndicator(
-            child: SafeArea(
-                child: _buildList(vm),
-            ),
-            onRefresh: tryToRefresh(vm),
-          );
+          if(vm.lastTimeFailed)
+            return buildFailed(vm.refresh);
+          else if(vm.noRowAvailable)
+            return buildEmptyPlaceHolder();
+          else if(vm.fetching)
+            return buildLoading();
+          else
+            return RefreshIndicator(
+              child: SafeArea(
+                  child: _buildList(vm),
+              ),
+              onRefresh: tryToRefresh(vm),
+            );
 
 
         });
@@ -110,13 +79,8 @@ class NewsList extends StatelessWidget {
 
 Function tryToRefresh(ListModel vm) {
   return () async {
-    try{
-      var connectivityResult = await (Connectivity().checkConnectivity());
-      if (connectivityResult == ConnectivityResult.mobile || connectivityResult == ConnectivityResult.wifi) {
-          vm.refresh();
-      }
-    }catch(err){
-
+    if(await isOnline()){
+      vm.refresh();
     }
   };
 }

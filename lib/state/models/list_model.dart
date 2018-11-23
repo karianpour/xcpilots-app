@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
@@ -21,7 +19,7 @@ class ListModel {
   final bool fetching;
   final double scrollPosition;
 
-  final VoidCallback refresh;
+  final Function refresh;
   final FetchMoreRows fetchMoreRows;
   final SaveScrollPosition saveScrollPosition;
 

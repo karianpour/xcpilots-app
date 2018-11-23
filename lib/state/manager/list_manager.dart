@@ -1,6 +1,6 @@
 import 'package:xcpilots/state/models/list_model.dart';
 
-const int REFRESH_TIMEOUT = 30 * 60 * 1000; // for test i reduced it  5 * 60 * 60 * 1000;
+const int REFRESH_TIMEOUT = 60 * 60 * 1000;
 const RETRY_TIMEOUT = 3 * 60 * 1000;
 
 void manageList(ListModel list) async{

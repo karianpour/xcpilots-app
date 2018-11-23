@@ -39,16 +39,22 @@ String getNewsBody(data){
 
 String findNewsImageUrl(Map data) {
   if(data==null) return null;
-  var images = data['pictures'];
-  if(images!=null && images is List){
-    if(images.length>0){
-      if(images[0]['thumbnail']!=null)
-        return getPicturesBaseUrl() + images[0]['thumbnail'];
-      else if(images[0]['url']!=null)
-        return getPicturesBaseUrl() + images[0]['url'];
-      else if(images[0]['src']!=null)
-        return getPicturesBaseUrl() + images[0]['src'];
+  var pictures = data['pictures'];
+  if(pictures!=null && pictures is List){
+    if(pictures.length>0){
+      return findImageUrlInPictures(pictures[0]);
     }
+  }else if(pictures!=null && pictures is Map){
+    return findImageUrlInPictures(pictures);
   }
   return null;
+}
+
+String findImageUrlInPictures(Map pictures){
+  if(pictures['thumbnail']!=null)
+    return getPicturesBaseUrl() + pictures['thumbnail'];
+  else if(pictures['url']!=null)
+    return getPicturesBaseUrl() + pictures['url'];
+  else if(pictures['src']!=null)
+    return getPicturesBaseUrl() + pictures['src'];
 }
