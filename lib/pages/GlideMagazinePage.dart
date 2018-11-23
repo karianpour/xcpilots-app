@@ -10,6 +10,7 @@ import 'package:xcpilots/utils.dart';
 import 'package:xcpilots/widgets/ui_utils.dart';
 
 const int REFRESH_TIMEOUT = 1 * 24 * 60 * 60 * 1000;
+const String directory = 'glide';
 
 class GlideMagazinePage extends StatefulWidget {
   @override
@@ -17,7 +18,7 @@ class GlideMagazinePage extends StatefulWidget {
 }
 
 class _GlideMagazinePageState extends State<GlideMagazinePage> {
-  List _glides;
+  List _rows;
   int _lastFetch;
   bool _loading;
   bool _failed;
@@ -29,16 +30,16 @@ class _GlideMagazinePageState extends State<GlideMagazinePage> {
   }
 
   bootState() async{
-    Map state = await restoreState(directory: 'glide');
+    Map state = await restoreState(directory: directory);
     if(state!=null){
-      List rows = await checkDownloadState(state['glides']);
+      List rows = await checkDownloadState(state['rows']);
       setState(() {
         _lastFetch = state['lastFetch'];
-        _glides = rows;
+        _rows = rows;
       });
     }
 
-    if(_glides==null || _lastFetch==null || DateTime.now().millisecondsSinceEpoch - _lastFetch > REFRESH_TIMEOUT){
+    if(_rows==null || _lastFetch==null || DateTime.now().millisecondsSinceEpoch - _lastFetch > REFRESH_TIMEOUT){
       refreshGlide();
     }
   }
@@ -48,7 +49,7 @@ class _GlideMagazinePageState extends State<GlideMagazinePage> {
       _loading = true;
       _failed = false;
     });
-    print('refreshing glider');
+    print('refreshing glide');
     if(!await isOnline()){
       print('no network, aborting!');
       return;
@@ -60,13 +61,13 @@ class _GlideMagazinePageState extends State<GlideMagazinePage> {
       rows = await checkDownloadState(rows);
 
       setState((){
-        _glides = rows;
+        _rows = rows;
         _loading = false;
       });
       persistState(state: {
         'lastFetch' : _lastFetch,
-        'glides': _glides,
-      }, directory: 'glide');
+        'rows': _rows,
+      }, directory: directory);
     }catch(error){
       print(error);
       setState((){
@@ -80,9 +81,9 @@ class _GlideMagazinePageState extends State<GlideMagazinePage> {
 
   Future<List> checkDownloadState(List rows) async{
     if(rows==null) return null;
-    final directory = await getApplicationDocumentsDirectory();
-    print('checking for downloads ${directory.path}');
-    var dir = Directory('${directory.path}/glide');
+    final documentsDir = await getApplicationDocumentsDirectory();
+    print('checking for downloads ${documentsDir.path}');
+    var dir = Directory('${documentsDir.path}/$directory');
     if(dir.existsSync()){
       rows = rows.map((data) {
         String fileName = data['file']['filename'];
@@ -107,17 +108,17 @@ class _GlideMagazinePageState extends State<GlideMagazinePage> {
     String url = data['file']['src'];
     print("data $fileName $url");
 
-    var newGlides = _glides.map((glide){
-      if(glide['id']!=id){
-        return Map.from(glide);
+    var newRows = _rows.map((row){
+      if(row['id']!=id){
+        return Map.from(row);
       }
-      var newGlide = Map.from(glide);
-      newGlide['downloading'] = true;
-      return newGlide;
+      var newRow = Map.from(row);
+      newRow['downloading'] = true;
+      return newRow;
     }).toList();
 
     setState(() {
-      _glides = newGlides;
+      _rows = newRows;
     });
 
     var dio = new Dio();
@@ -125,11 +126,8 @@ class _GlideMagazinePageState extends State<GlideMagazinePage> {
     dio.options.connectTimeout = 5000;
     dio.options.receiveTimeout=5000;
 
-    final directory = await getApplicationDocumentsDirectory();
-
-
-    var dir = Directory('${directory.path}/glide');
-
+    final documentsDir = await getApplicationDocumentsDirectory();
+    var dir = Directory('${documentsDir.path}/$directory');
     await dir.create(recursive: true);
 
     String path = '${dir.path}/$fileName';
@@ -142,18 +140,18 @@ class _GlideMagazinePageState extends State<GlideMagazinePage> {
 
     print(response.statusCode);
 
-    newGlides = _glides.map((glide){
-      if(glide['id']!=id){
-        return Map.from(glide);
+    newRows = _rows.map((row){
+      if(row['id']!=id){
+        return Map.from(row);
       }
-      var newGlide = Map.from(glide);
-      newGlide['downloading'] = false;
-      newGlide['downloaded'] = true;
-      return newGlide;
+      var newRow = Map.from(row);
+      newRow['downloading'] = false;
+      newRow['downloaded'] = true;
+      return newRow;
     }).toList();
 
     setState(() {
-      _glides = newGlides;
+      _rows = newRows;
     });
 
   }
@@ -166,8 +164,8 @@ class _GlideMagazinePageState extends State<GlideMagazinePage> {
       return;
     }
 
-    final directory = await getApplicationDocumentsDirectory();
-    var dir = Directory('${directory.path}/glide');
+    final documentsDir = await getApplicationDocumentsDirectory();
+    var dir = Directory('${documentsDir.path}/$directory');
     String path = '${dir.path}/$fileName';
     print('opening from $path');
     var file = File(path);
@@ -187,26 +185,26 @@ class _GlideMagazinePageState extends State<GlideMagazinePage> {
       return;
     }
 
-    final directory = await getApplicationDocumentsDirectory();
-    var dir = Directory('${directory.path}/glide');
+    final documentsDir = await getApplicationDocumentsDirectory();
+    var dir = Directory('${documentsDir.path}/$directory');
     String path = '${dir.path}/$fileName';
     print('deleting from $path');
     var file = File(path);
     if(await file.exists()){
       await file.delete(recursive: false);
 
-      var newGlides = _glides.map((glide){
-        if(glide['id']!=id){
-          return Map.from(glide);
+      var newRows = _rows.map((row){
+        if(row['id']!=id){
+          return Map.from(row);
         }
-        var newGlide = Map.from(glide);
-        newGlide['downloading'] = false;
-        newGlide['downloaded'] = false;
-        return newGlide;
+        var newRow = Map.from(row);
+        newRow['downloading'] = false;
+        newRow['downloaded'] = false;
+        return newRow;
       }).toList();
 
       setState(() {
-        _glides = newGlides;
+        _rows = newRows;
       });
 
     }else{
@@ -232,19 +230,19 @@ class _GlideMagazinePageState extends State<GlideMagazinePage> {
         ],
       ),
       body: RefreshIndicator(
-        child: _glides==null ? _loading ? buildLoading() : _failed ? buildFailed(refreshGlide) : buildEmptyPlaceHolder() : _gliderList(context, _glides),
+        child: _rows==null ? _loading ? buildLoading() : _failed ? buildFailed(refreshGlide) : buildEmptyPlaceHolder() : _rows.length==0 ? buildEmptyPlaceHolder() : _glideList(context, _rows),
         onRefresh: refreshGlide,
       )
     );
   }
 
-  Widget _gliderList(BuildContext context, List glides) {
+  Widget _glideList(BuildContext context, List rows) {
     return SafeArea(
         child: Container(
         constraints: BoxConstraints.expand(),
         child: ListView(
           padding: EdgeInsets.only(top: 20.0),
-          children: glides.map((glide) => _buildGlideCard(glide)).toList(),
+          children: rows.map((row) => _buildGlideCard(row)).toList(),
         ),
       ),
     );
@@ -254,7 +252,7 @@ class _GlideMagazinePageState extends State<GlideMagazinePage> {
     return FlatButton(
       padding: EdgeInsets.all(3.0),
       onPressed: () {
-        print('whole pressed');
+        this.handleOpen(data);
       },
       child: Card(
         margin: EdgeInsets.only(top: 4.0, bottom: 4.0),

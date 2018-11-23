@@ -14,9 +14,7 @@ class AboutUsPage extends StatelessWidget {
             icon: Icon(Icons.home),
             onPressed: () {
               String route = '/';
-              // Navigator.pushNamed(context, route);
               Navigator.popUntil(context, ModalRoute.withName(route));
-              // Navigator.pop(context);
             },
           )
         ],
@@ -32,13 +30,6 @@ _aboutUs(BuildContext context) {
   const double imagePadding = 80.0; //mediaQueryData.size.width / 4;
   return Container(
     constraints: BoxConstraints.expand(),
-    decoration: BoxDecoration(
-      image:
-          DecorationImage(
-            image: AssetImage('assets/images/xcpilots_bg.jpeg'),
-            fit: BoxFit.cover
-          ),
-    ),
     child: ListView(
       padding: EdgeInsets.only(top: topPadding),
       children: <Widget>[
@@ -49,9 +40,17 @@ _aboutUs(BuildContext context) {
             child: Image(image: AssetImage('assets/images/XcBowo.jpg'), fit: BoxFit.fitWidth,),
           )),
         Center(
-          child: Text(translate('about_us_content')),
+          child: Column(
+            children: <Widget>[
+              Text(translate('about_us_content')),
+              Text('Kayvan Arianpour'),
+              Text('Sadegh Barikani'),
+              Text('Mohammad Azari'),
+              Text('Matin Firoozi'),
+              Text('Bowo'),
+            ],
+          ),
         ),
-        Placeholder(),
       ],
     ),
   );

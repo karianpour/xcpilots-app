@@ -14,9 +14,7 @@ class FlightsHighlightPage extends StatelessWidget {
             icon: Icon(Icons.home),
             onPressed: () {
               String route = '/';
-              // Navigator.pushNamed(context, route);
               Navigator.popUntil(context, ModalRoute.withName(route));
-              // Navigator.pop(context);
             },
           )
         ],
@@ -32,24 +30,17 @@ _aboutUs(BuildContext context) {
   const double imagePadding = 80.0; //mediaQueryData.size.width / 4;
   return Container(
     constraints: BoxConstraints.expand(),
-    decoration: BoxDecoration(
-      image:
-          DecorationImage(
-            image: AssetImage('assets/images/xcpilots_bg.jpeg'),
-            fit: BoxFit.cover
-          ),
-    ),
     child: ListView(
       padding: EdgeInsets.only(top: topPadding),
       children: <Widget>[
-        ConstrainedBox(
-          constraints: BoxConstraints.tightFor(width: 50.0),
-          child: Padding(
-            padding: const EdgeInsets.only(left: imagePadding, right: imagePadding, bottom: 10.0),
-            child: Image(image: AssetImage('assets/images/XcBowo.jpg'), fit: BoxFit.fitWidth,),
-          )),
         Center(
-          child: Text(translate('flights_highlight')),
+          child: Column(
+            children: <Widget>[
+              Icon(Icons.build, size: 80.0,),
+              Text(translate('flights_highlight')),
+              Text('Here we want to show the best flights done in the last week/month/year/ever done in iran/world'),
+            ],
+          ),
         ),
         Placeholder(),
       ],

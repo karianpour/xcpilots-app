@@ -3,7 +3,7 @@ Map translations = {
   'glide_magazin': 'مجله گلاید',
   'radio_paraglider': 'رادیو پاراگلایدر',
   'news': 'اخبار',
-  'flights_hightlight': 'پروازهای برجسته',
+  'flights_highlight': 'پروازهای برجسته',
   'about_us': 'درباره ما',
   'xc_pilots': 'ایکسی‌پایلوتس',
   'about_us_title': 'درباره ما',
