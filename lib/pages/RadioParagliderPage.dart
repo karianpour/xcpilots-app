@@ -12,16 +12,14 @@ import 'package:xcpilots/widgets/ui_utils.dart';
 const int REFRESH_TIMEOUT = 1 * 24 * 60 * 60 * 1000;
 const String directory = 'radio';
 
-//class RadioParagliderPage extends StatelessWidget {
-//        title: Text(translate('radio_paraglider')),
-
 class RadioParagliderPage extends StatefulWidget {
   @override
   _RadioParagliderPageState createState() => _RadioParagliderPageState();
 }
 
 class _RadioParagliderPageState extends State<RadioParagliderPage> {
-  List _rows;
+  static _RadioParagliderPageState _latestState;
+  List<Map> _rows;
   int _lastFetch;
   bool _loading;
   bool _failed;
@@ -29,13 +27,67 @@ class _RadioParagliderPageState extends State<RadioParagliderPage> {
   _RadioParagliderPageState(){
     _loading = true;
     _failed = false;
+    _latestState = this;
     bootState();
+  }
+
+  _stateFailed(){
+    if(!this.mounted) return;
+    setState((){
+      _loading = false;
+      _failed = true;
+    });
+  }
+  _stateLoading(){
+    if(!this.mounted) return;
+    setState((){
+      _loading = true;
+      _failed = false;
+    });
+  }
+  _stateRowsLoaded(List<Map> rows){
+    if(!this.mounted) return;
+    setState((){
+      _rows = rows;
+      _loading = false;
+      _failed = false;
+    });
+  }
+
+  _stateDownloadingRow(String id){
+    _stateRowChanged(id, true, false);
+  }
+
+  _stateDownloadedRow(String id){
+    _stateRowChanged(id, false, true);
+  }
+
+  _stateDeletedRow(String id){
+    _stateRowChanged(id, false, false);
+  }
+
+  _stateRowChanged(String id, bool downloding, bool downloaded){
+    if(_latestState ==null || !_latestState.mounted) return;
+    var newRows = _latestState._rows.map((row){
+      if(row['id']!=id){
+        return row;
+      }
+      var newRow = Map.from(row);
+      newRow['downloading'] = downloding;
+      newRow['downloaded'] = downloaded;
+      return newRow;
+    }).toList();
+
+    _latestState.setState(() {
+      _latestState._rows = newRows;
+    });
   }
 
   bootState() async{
     Map state = await restoreState(directory: directory);
     if(state!=null){
-      List rows = await checkDownloadState(state['rows']);
+      List<Map> rows = await checkDownloadState(state['rows'].cast<Map>());
+      if(!this.mounted) return;
       setState(() {
         _lastFetch = state['lastFetch'];
         _rows = rows;
@@ -48,41 +100,32 @@ class _RadioParagliderPageState extends State<RadioParagliderPage> {
   }
 
   Future<void> refreshRadio() async{
-    setState(() {
-      _loading = true;
-      _failed = false;
-    });
+    _stateLoading();
     print('refreshing radio');
     if(!await isOnline()){
       print('no network, aborting!');
       return;
     }
     try{
-      List rows = await XcPilotsApi.getInstance().fetchContentData(section: 'radio', before: null);
+      List<Map> rows = await XcPilotsApi.getInstance().fetchContentData(section: 'radio', before: null);
       _lastFetch = DateTime.now().millisecondsSinceEpoch;
 
       rows = await checkDownloadState(rows);
 
-      setState((){
-        _rows = rows;
-        _loading = false;
-      });
+      _stateRowsLoaded(rows);
       persistState(state: {
         'lastFetch' : _lastFetch,
         'rows': _rows,
       }, directory: directory);
     }catch(error){
       print(error);
-      setState((){
-        _loading = false;
-        _failed = true;
-      });
+      _stateFailed();
     } finally {
       print('end fetching');
     }
   }
 
-  Future<List> checkDownloadState(List rows) async{
+  Future<List<Map>> checkDownloadState(List<Map> rows) async{
     if(rows==null) return null;
     final documentsDir = await getApplicationDocumentsDirectory();
     print('checking for downloads ${documentsDir.path}');
@@ -90,11 +133,17 @@ class _RadioParagliderPageState extends State<RadioParagliderPage> {
     if(dir.existsSync()){
       rows = rows.map((data) {
         String fileName = data['file']['filename'];
+        int fileSize = data['file']['size'];
         String path = '${dir.path}/$fileName';
         var file = File(path);
         if(file.existsSync()){
-          data['downloading'] = false;
-          data['downloaded'] = true;
+          if(file.lengthSync() == fileSize){
+            data['downloading'] = false;
+            data['downloaded'] = true;
+          }else{
+            data['downloading'] = true;
+            data['downloaded'] = false;
+          }
         }else{
           data['downloading'] = false;
           data['downloaded'] = false;
@@ -108,21 +157,11 @@ class _RadioParagliderPageState extends State<RadioParagliderPage> {
   void handleDownload(Map data) async{
     String id = data['id'];
     String fileName = data['file']['filename'];
+    int fileSize = data['file']['size'];
     String url = data['file']['src'];
     print("data $fileName $url");
 
-    var newRows = _rows.map((row){
-      if(row['id']!=id){
-        return Map.from(row);
-      }
-      var newRow = Map.from(row);
-      newRow['downloading'] = true;
-      return newRow;
-    }).toList();
-
-    setState(() {
-      _rows = newRows;
-    });
+    _stateDownloadingRow(id);
 
     var dio = new Dio();
     //dio.options.baseUrl = "http://api.iranxc.ir/";
@@ -140,25 +179,11 @@ class _RadioParagliderPageState extends State<RadioParagliderPage> {
 
     Response response = await dio.download(
         'http://api.iranxc.ir$url', path, onProgress: (received, total) {
-      print('$received,$total');
+      print('$received,$fileSize');
     });
 
-    print(response.statusCode);
-
-    newRows = _rows.map((row){
-      if(row['id']!=id){
-        return Map.from(row);
-      }
-      var newRow = Map.from(row);
-      newRow['downloading'] = false;
-      newRow['downloaded'] = true;
-      return newRow;
-    }).toList();
-
-    setState(() {
-      _rows = newRows;
-    });
-
+    if(response.statusCode==0)
+      _stateDownloadedRow(id);
   }
 
   void handleOpen(Map data) async{
@@ -198,19 +223,7 @@ class _RadioParagliderPageState extends State<RadioParagliderPage> {
     if(await file.exists()){
       await file.delete(recursive: false);
 
-      var newRows = _rows.map((row){
-        if(row['id']!=id){
-          return Map.from(row);
-        }
-        var newRow = Map.from(row);
-        newRow['downloading'] = false;
-        newRow['downloaded'] = false;
-        return newRow;
-      }).toList();
-
-      setState(() {
-        _rows = newRows;
-      });
+      _stateDeletedRow(id);
 
     }else{
       print('the file does not exists!');
@@ -241,7 +254,7 @@ class _RadioParagliderPageState extends State<RadioParagliderPage> {
     );
   }
 
-  Widget _radioList(BuildContext context, List rows) {
+  Widget _radioList(BuildContext context, List<Map> rows) {
     return SafeArea(
         child: Container(
         constraints: BoxConstraints.expand(),

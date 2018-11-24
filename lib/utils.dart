@@ -3,6 +3,14 @@ import 'dart:io';
 import 'package:path_provider/path_provider.dart';
 import 'package:connectivity/connectivity.dart';
 
+String mapToFarsi(String str){
+  return str.replaceAllMapped(RegExp(r"\d"), 
+    (Match m) {
+      return convertDigit(m[0]);
+    }
+  );
+}
+
 String convertDigit(String m) {
   switch(m){
     case "1":

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:xcpilots/data/translation.dart';
+import 'package:xcpilots/utils.dart';
 
 class AboutUsPage extends StatelessWidget {
 
@@ -43,11 +44,12 @@ _aboutUs(BuildContext context) {
           child: Column(
             children: <Widget>[
               Text(translate('about_us_content')),
-              Text('Kayvan Arianpour'),
-              Text('Sadegh Barikani'),
-              Text('Mohammad Azari'),
-              Text('Matin Firoozi'),
-              Text('Bowo'),
+              Text(translate('Kayvan Arianpour')),
+              Text(translate('Sadegh Barikani')),
+              Text(translate('Mohammad Azari')),
+              Text(translate('Matin Firoozi')),
+              Text(translate('Bowo')),
+              Text(translate('Version') +' '+ mapToFarsi("1.0.5")),
             ],
           ),
         ),

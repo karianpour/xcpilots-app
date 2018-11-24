@@ -11,7 +11,12 @@ Map translations = {
   'news_page_title': 'اخبار',
   'single_news_page_title': 'خبر',
   'publish_time': 'زمان انتشار',
-  '': '',
+  'Kayvan Arianpour': 'کیوان آرین‌پور',
+  'Sadegh Barikani': 'صادق باریکانی',
+  'Mohammad Azari': 'محمد آذری',
+  'Matin Firoozi': 'متین فیروزی',
+  'Bowo': 'بوُوُ',
+  'Version': 'نسخه',
 };
 
 String translate(String key){
