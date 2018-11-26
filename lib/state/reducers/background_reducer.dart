@@ -30,7 +30,7 @@ Map<String, dynamic> fetchingBackground(Map<String, dynamic> state, BackgroundFe
   
 
   newSection['fetching'] = action.fetching;
-  newSection['lastTimeFailed'] = false;
+  if(action.fetching) newSection['lastTimeFailed'] = false;
   newSection['lastTime'] = DateTime.now().millisecondsSinceEpoch;
 
   return newState;

@@ -15,12 +15,12 @@ Middleware<AppState> _fetchBackground(){
 
     try{
       List rows = await XcPilotsApi.getInstance().fetchBackground(section: action.section);
-      store.dispatch(new BackgroundFetchingSucceedAction(action.section, rows));
+      store.dispatch(BackgroundFetchingSucceedAction(action.section, rows));
     }catch(error){
-      store.dispatch(new BackgroundFetchingFailedAction(action.section));
+      store.dispatch(BackgroundFetchingFailedAction(action.section));
       print(error);
     } finally {
-      store.dispatch(new BackgroundFetchingAction(action.section, false));
+      store.dispatch(BackgroundFetchingAction(action.section, false));
       print('end fetching');
     }
 

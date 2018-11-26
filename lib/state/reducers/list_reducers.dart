@@ -7,7 +7,7 @@ Map<String, dynamic> fetchingList(Map<String, dynamic> state, ListFetchingMoreRo
   newState[action.modelName] = newList;
 
   newList['fetching'] = action.fetching;
-  newList['lastTimeFailed'] = false;
+  if(action.fetching) newList['lastTimeFailed'] = false;
   newList['refreshTime'] = DateTime.now().millisecondsSinceEpoch;
 
   return newState;
@@ -44,7 +44,7 @@ Map<String, dynamic> fetchingListSucceed(Map<String, dynamic> state, ListFetchin
     newList['lastRowIndex'] = _lastRowIndex;
     newList['rowQty'] = _lastRowIndex + 1 + 1;
   }else{
-    newList['noRowAvailable'] = true;
+    newList['noRowAvailable'] = _lastRowIndex == null ? true : false;
     newList['rowQty'] = _lastRowIndex + 1;
   }
 

@@ -52,11 +52,11 @@ class ListModel {
       fetching: list['fetching'],
       scrollPosition: list['scrollPosition'],
       scrollController: ScrollController(initialScrollOffset: list['scrollPosition']),
-      refresh: () {
-        store.dispatch(new ListRefreshAction(modelName));
+      refresh: () async {
+        store.dispatch(ListRefreshAction(modelName));
       },
       fetchMoreRows: (bool firstFetch) {
-        store.dispatch(new ListFetchMoreRowsAction(modelName, firstFetch));
+        store.dispatch(ListFetchMoreRowsAction(modelName, firstFetch));
       },
       saveScrollPosition: (double position) {
         //store.dispatch(new NewsSaveScrollPositionAction(position));

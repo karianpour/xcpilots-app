@@ -45,6 +45,9 @@ class NewsList extends StatelessWidget {
 
         itemBuilder: (context, index) {
           var row = _getRowData(vm, index);
+          if(vm.lastTimeFailed && row['loading'] != null && row['loading']){
+            return buildFaildCard(tryToLoadMore(vm));
+          }
           return NewsCard(row, index);
         }
       ),
@@ -58,12 +61,12 @@ class NewsList extends StatelessWidget {
         converter: ListModel.listFromStore('news'),
         builder: (BuildContext context, ListModel vm) {
           manageList(vm);
-          if(vm.lastTimeFailed)
+          if(vm.rowQty == 0 && vm.lastTimeFailed)
             return buildFailed(vm.refresh);
-          else if(vm.noRowAvailable)
-            return buildEmptyPlaceHolder();
-          else if(vm.fetching)
+          else if(vm.rowQty == 0 && vm.fetching)
             return buildLoading();
+          else if(vm.rowQty == 0 || vm.noRowAvailable)
+            return buildEmptyPlaceHolder(vm.refresh);
           else
             return RefreshIndicator(
               child: SafeArea(
@@ -71,8 +74,6 @@ class NewsList extends StatelessWidget {
               ),
               onRefresh: tryToRefresh(vm),
             );
-
-
         });
   }
 }
@@ -81,6 +82,14 @@ Function tryToRefresh(ListModel vm) {
   return () async {
     if(await isOnline()){
       vm.refresh();
+    }
+  };
+}
+
+Function tryToLoadMore(ListModel vm) {
+  return () async {
+    if(await isOnline()){
+      vm.fetchMoreRows(false);
     }
   };
 }
@@ -97,8 +106,9 @@ class NewsCard extends StatelessWidget {
     return FlatButton(
       padding: EdgeInsets.all(3.0),
       onPressed: () {
-       String route = '/single_news/${data["id"]}';
-       Navigator.pushNamed(context, route);
+        if(data["id"]==null) return;
+        String route = '/single_news/${data["id"]}';
+        Navigator.pushNamed(context, route);
       },
       child: Card(
         margin: EdgeInsets.only(top: 4.0, bottom: 4.0),

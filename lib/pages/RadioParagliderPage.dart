@@ -248,7 +248,17 @@ class _RadioParagliderPageState extends State<RadioParagliderPage> {
         ],
       ),
       body: RefreshIndicator(
-        child: _rows==null ? _loading ? buildLoading() : _failed ? buildFailed(refreshRadio) : buildEmptyPlaceHolder() : _rows.length==0 ? buildEmptyPlaceHolder() : _radioList(context, _rows),
+        child: 
+          _rows==null ? _loading ? 
+            buildLoading() 
+          : _failed ? 
+            buildFailed(refreshRadio) 
+          : 
+            buildEmptyPlaceHolder(refreshRadio) 
+          : _rows.length==0 ? 
+            buildEmptyPlaceHolder(refreshRadio) 
+          : 
+            _radioList(context, _rows),
         onRefresh: refreshRadio,
       )
     );

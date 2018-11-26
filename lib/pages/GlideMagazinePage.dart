@@ -246,7 +246,17 @@ class _GlideMagazinePageState extends State<GlideMagazinePage> {
         ],
       ),
       body: RefreshIndicator(
-        child: _rows==null ? _loading ? buildLoading() : _failed ? buildFailed(refreshGlide) : buildEmptyPlaceHolder() : _rows.length==0 ? buildEmptyPlaceHolder() : _glideList(context, _rows),
+        child: 
+          _rows==null ? _loading ? 
+            buildLoading() 
+          : _failed ? 
+            buildFailed(refreshGlide) 
+          : 
+            buildEmptyPlaceHolder(refreshGlide) 
+          : _rows.length==0 ? 
+            buildEmptyPlaceHolder(refreshGlide) 
+          : 
+            _glideList(context, _rows),
         onRefresh: refreshGlide,
       )
     );
