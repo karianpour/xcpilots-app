@@ -74,12 +74,14 @@ Map<String, dynamic> refreshList(Map<String, dynamic> state, ListRefreshAction a
   return newState;
 }
 
-// Map saveScrollPosition(Map state, ListSaveScrollPositionAction action){
+Map saveScrollPosition(Map state, ListSaveScrollPositionAction action){
 //  Map newState = new Map.from(state);
 //  Map newList = new Map.from(newState[action.modelName] ?? {});
 //  newState[action.modelName] = newList;
 
-//   newList['scrollPosition'] = action.position;
+//  newList['scrollPosition'] = action.position;
 
-//   return newState;
-// }
+//  return newState;
+  state[action.modelName]['scrollPosition'] = action.position;
+  return state;
+}

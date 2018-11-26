@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:xcpilots/data/translation.dart';
 
 Widget buildEmptyPlaceHolder(Function refresh){
   return RefreshIndicator(
@@ -8,7 +9,7 @@ Widget buildEmptyPlaceHolder(Function refresh){
       children: <Widget>[
         Container(height: 80.0,),
         Center(
-          child: const Text('داده‌ای نیست!'),
+          child: const Text('no data'),
         )
       ],
     ),
@@ -28,7 +29,7 @@ Widget buildFailed(Function refresh){
       physics: const AlwaysScrollableScrollPhysics(),
       children: <Widget>[
         Container(height: 80.0,),
-        Center(child: const Text('مشکلی در ارتباط با سرور بوجود آمد. مجدد تلاش کنید!')),
+        Center(child: const Text('problem while connecting to the server')),
       ],
     ),
     onRefresh: refresh,
@@ -40,7 +41,7 @@ Widget buildFaildCard(Function loadMore){
     child: Container(
       height: 80.0,
       child: Center(
-        child: const Text('faild to load, press to retry')
+        child: Text(translate('faild to load, press to retry'))
       ),
     ),
     onPressed: (){

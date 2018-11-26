@@ -59,8 +59,8 @@ class ListModel {
         store.dispatch(ListFetchMoreRowsAction(modelName, firstFetch));
       },
       saveScrollPosition: (double position) {
-        //store.dispatch(new NewsSaveScrollPositionAction(position));
-        store.state.state[modelName]['scrollPosition'] = position;
+        store.dispatch(ListSaveScrollPositionAction(modelName, position));
+        // store.state.state[modelName]['scrollPosition'] = position;
       }
     );
   }

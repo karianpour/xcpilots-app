@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -12,7 +14,7 @@ import 'package:xcpilots/widgets/ui_utils.dart';
 
 class NewsList extends StatelessWidget {
 
-  //final ScrollController _scrollController = ScrollController();
+  // final ScrollController _scrollController = ScrollController();
 
   // NewsList(){
   //   _scrollController.addListener((){
@@ -29,12 +31,19 @@ class NewsList extends StatelessWidget {
     return row;
   }
 
+  Timer _debounce;
+  _handleScrollPositionChanged(ListModel vm, double position) {
+    if (_debounce?.isActive ?? false) _debounce.cancel();
+    _debounce = Timer(const Duration(milliseconds: 500), () {
+      vm.saveScrollPosition(position);
+    });
+  }
 
   Widget _buildList(ListModel vm){
     return NotificationListener(
       onNotification: (notifiction){
         if(notifiction is ScrollNotification){
-          vm.saveScrollPosition(notifiction.metrics.pixels);
+          _handleScrollPositionChanged(vm, notifiction.metrics.pixels);
         }
       },
       child: ListView.builder(

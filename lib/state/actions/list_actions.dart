@@ -46,13 +46,13 @@ class ListRefreshAction {
   String get modelName => _modelName;
 }
 
-// class ListSaveScrollPositionAction {
-//  final String _modelName;
-//   final double _position;
+class ListSaveScrollPositionAction {
+  final String _modelName;
+  final double _position;
 
-//   ListSaveScrollPositionAction(this._modelName, this._position);
+  ListSaveScrollPositionAction(this._modelName, this._position);
 
-//   double get position => _position;
-//  String get modelName => _modelName;
-// }
+  double get position => _position;
+  String get modelName => _modelName;
+}
 

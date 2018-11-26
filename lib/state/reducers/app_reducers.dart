@@ -27,8 +27,8 @@ Map<String, dynamic> doAction(Map state, action){
     return fetchingListSucceed(state, action);
   }else if(action is ListRefreshAction){
     return refreshList(state, action);
-  // }else if(action is NewsSaveScrollPositionAction){
-  //   return saveScrollPosition(state, action);
+  }else if(action is ListSaveScrollPositionAction){
+    return saveScrollPosition(state, action);
   }else if(action is RefreshBackgroundAction){
     return refreshBackground(state, action);
   }else if(action is FetchBackgroundAction){

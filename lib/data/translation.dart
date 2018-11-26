@@ -11,12 +11,15 @@ Map translations = {
   'news_page_title': 'اخبار',
   'single_news_page_title': 'خبر',
   'publish_time': 'زمان انتشار',
-  'Kayvan Arianpour': 'کیوان آرین‌پور',
-  'Sadegh Barikani': 'صادق باریکانی',
-  'Mohammad Azari': 'محمد آذری',
-  'Matin Firoozi': 'متین فیروزی',
-  'Bowo': 'بوُوُ',
-  'Version': 'نسخه',
+  'kayvan arianpour': 'کیوان آرین‌پور',
+  'sadegh barikani': 'صادق باریکانی',
+  'mohammad azari': 'محمد آذری',
+  'matin firoozi': 'متین فیروزی',
+  'bowo': 'بوُوُ',
+  'version': 'نسخه',
+  'faild to load, press to retry': '',
+  'problem while connecting to the server': 'مشکلی در ارتباط با سرور بوجود آمد. مجدد تلاش کنید!',
+  'no data': 'داده‌ای نیست!',
 };
 
 String translate(String key){

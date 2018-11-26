@@ -44,12 +44,12 @@ _aboutUs(BuildContext context) {
           child: Column(
             children: <Widget>[
               Text(translate('about_us_content')),
-              Text(translate('Kayvan Arianpour')),
-              Text(translate('Sadegh Barikani')),
-              Text(translate('Mohammad Azari')),
-              Text(translate('Matin Firoozi')),
-              Text(translate('Bowo')),
-              Text(translate('Version') +' '+ mapToFarsi("1.0.5")),
+              Text(translate('kayvan arianpour')),
+              Text(translate('sadegh barikani')),
+              Text(translate('mohammad azari')),
+              Text(translate('matin firoozi')),
+              Text(translate('bowo')),
+              Text(translate('version') +' '+ mapToFarsi("1.0.6")),
             ],
           ),
         ),
