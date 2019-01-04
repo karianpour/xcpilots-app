@@ -1,5 +1,5 @@
-import 'package:xcpilots/state/actions/background_actions.dart';
-import 'package:xcpilots/state/models/news_model.dart';
+import 'package:xcpilots/state/background/background_actions.dart';
+import 'package:xcpilots/state/news/news_model.dart';
 
 Map<String, dynamic> fetchBackground(Map<String, dynamic> state, FetchBackgroundAction action){
   state['background']['lastTime'] = DateTime.now().millisecondsSinceEpoch;

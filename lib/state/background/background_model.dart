@@ -1,7 +1,7 @@
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
-import 'package:xcpilots/state/actions/background_actions.dart';
-import 'package:xcpilots/state/models/app_state.dart';
+import 'package:xcpilots/state/background/background_actions.dart';
+import 'package:xcpilots/state/app_state.dart';
 
 StoreConverter<AppState, Map> backgroundFromStore(String section){
   return (Store<AppState> store) {

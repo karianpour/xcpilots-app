@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux/redux.dart';
-import 'package:xcpilots/state/actions/list_actions.dart';
-import 'package:xcpilots/state/models/app_state.dart';
+import 'package:xcpilots/state/list/list_actions.dart';
+import 'package:xcpilots/state/app_state.dart';
 
 typedef void SaveScrollPosition(double position);
 typedef void FetchMoreRows(bool firstFetch);

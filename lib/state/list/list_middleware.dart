@@ -1,7 +1,7 @@
 import 'package:redux/redux.dart';
-import 'package:xcpilots/state/actions/list_actions.dart';
+import 'package:xcpilots/state/list/list_actions.dart';
 import 'package:xcpilots/data/XcPilotsApi.dart';
-import 'package:xcpilots/state/models/app_state.dart';
+import 'package:xcpilots/state/app_state.dart';
 
 List<Middleware<AppState>> createListMiddlewares(){
   return [

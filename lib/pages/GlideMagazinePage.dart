@@ -4,6 +4,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:xcpilots/data/XcPilotsApi.dart';
 import 'package:xcpilots/data/translation.dart';
 import 'dart:io';
+import 'package:intl/intl.dart';
 import 'package:dio/dio.dart';
 import 'package:open_file/open_file.dart';
 import 'package:xcpilots/utils.dart';
@@ -18,6 +19,8 @@ class GlideMagazinePage extends StatefulWidget {
 }
 
 class _GlideMagazinePageState extends State<GlideMagazinePage> {
+  //TODO , having it static is a bad idea as people say, also try to save cancelToken some how
+  // here we have mixed UI and logic which is a bad idea
   static _GlideMagazinePageState _latestState;
   List<Map> _rows;
   int _lastFetch;
@@ -55,26 +58,27 @@ class _GlideMagazinePageState extends State<GlideMagazinePage> {
   }
 
   _stateDownloadingRow(String id){
-    _stateRowChanged(id, true, false);
+    _stateRowChanged(id, downloading: true, downloaded: false);
   }
 
   _stateDownloadedRow(String id){
-    _stateRowChanged(id, false, true);
+    _stateRowChanged(id, downloading: false, downloaded: true);
   }
 
   _stateDeletedRow(String id){
-    _stateRowChanged(id, false, false);
+    _stateRowChanged(id, downloading: false, downloaded: false);
   }
 
-  _stateRowChanged(String id, bool downloding, bool downloaded){
+  _stateRowChanged(String id, {bool downloading, bool downloaded, int received}){
     if(_latestState ==null || !_latestState.mounted) return;
     var newRows = _latestState._rows.map((row){
       if(row['id']!=id){
         return row;
       }
       var newRow = Map.from(row);
-      newRow['downloading'] = downloding;
-      newRow['downloaded'] = downloaded;
+      if(downloading!=null) newRow['downloading'] = downloading;
+      if(downloaded!=null) newRow['downloaded'] = downloaded;
+      if(received!=null) newRow['received'] = received;
       return newRow;
     }).toList();
 
@@ -175,13 +179,29 @@ class _GlideMagazinePageState extends State<GlideMagazinePage> {
     String path = '${dir.path}/$fileName';
     print('downloading from $url to $path');
 
+    var cancelToken = new CancelToken();
+    data['cancelToken'] = cancelToken;
+
     Response response = await dio.download(
-        'http://api.iranxc.ir$url', path, onProgress: (received, total) {
+        'http://api.iranxc.ir$url', path, cancelToken: cancelToken, onProgress: (received, total) {
       print('$received,$fileSize');
+      _stateRowChanged(id, received: received);
     });
 
     if(response.statusCode==0)
       _stateDownloadedRow(id);
+  }
+
+  void handleCancel(Map data) async{
+    String id = data['id'];
+    CancelToken cancelToken = data['cancelToken'];
+    if(cancelToken!=null){
+      cancelToken.cancel("user cancelled");
+    }
+
+    handleDelete(data);
+
+    _stateRowChanged(id, downloading: false, downloaded: false);
   }
 
   void handleOpen(Map data) async{
@@ -189,6 +209,7 @@ class _GlideMagazinePageState extends State<GlideMagazinePage> {
 
     if(data['downloaded']==null || !data['downloaded']) {
       print('the glide is not downloaded yet!');
+      handleCancel(data);
       return;
     }
 
@@ -245,8 +266,7 @@ class _GlideMagazinePageState extends State<GlideMagazinePage> {
           )
         ],
       ),
-      body: RefreshIndicator(
-        child: 
+      body:
           _rows==null ? _loading ? 
             buildLoading() 
           : _failed ? 
@@ -255,10 +275,10 @@ class _GlideMagazinePageState extends State<GlideMagazinePage> {
             buildEmptyPlaceHolder(refreshGlide) 
           : _rows.length==0 ? 
             buildEmptyPlaceHolder(refreshGlide) 
-          : 
-            _glideList(context, _rows),
-        onRefresh: refreshGlide,
-      )
+          : RefreshIndicator(
+              child: _glideList(context, _rows),
+              onRefresh: refreshGlide,
+          )
     );
   }
 
@@ -304,6 +324,17 @@ class _GlideMagazinePageState extends State<GlideMagazinePage> {
           ),
         ]
       )
+    );
+
+    var sizeStr = "${Bidi.LRM}${(data['file']['size']/1024/1024).toStringAsFixed(2)} MB";
+    if(data['downloading']!=null && data['downloading']) {
+      int received = data['received'];
+      if(received==null) received = 0;
+      sizeStr = "${Bidi.LRM}${(received/1024/1024).toStringAsFixed(2)} / " + sizeStr;
+    }
+    yield Text(
+      sizeStr, 
+      textAlign: TextAlign.start,
     );
 
     if(data['downloading']!=null && data['downloading']) {

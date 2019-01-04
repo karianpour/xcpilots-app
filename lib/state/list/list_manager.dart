@@ -1,4 +1,4 @@
-import 'package:xcpilots/state/models/list_model.dart';
+import 'package:xcpilots/state/list/list_model.dart';
 
 const int REFRESH_TIMEOUT = 60 * 60 * 1000;
 const RETRY_TIMEOUT = 3 * 60 * 1000;

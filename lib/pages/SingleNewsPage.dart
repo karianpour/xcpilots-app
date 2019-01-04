@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:xcpilots/data/translation.dart';
-import 'package:xcpilots/state/models/app_state.dart';
-import 'package:xcpilots/state/models/news_model.dart';
-import 'package:xcpilots/state/models/list_model.dart';
+import 'package:xcpilots/state/app_state.dart';
+import 'package:xcpilots/state/news/news_model.dart';
+import 'package:xcpilots/state/list/list_model.dart';
 import 'package:xcpilots/widgets/news_ui.dart';
 
 class SingleNewsPage extends StatelessWidget {

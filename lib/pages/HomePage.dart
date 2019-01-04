@@ -3,11 +3,11 @@ import 'package:flutter/rendering.dart';
 //import 'package:flutter_image/network.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:xcpilots/state/manager/background_manager.dart';
-import 'package:xcpilots/state/models/app_state.dart';
+import 'package:xcpilots/state/background/background_manager.dart';
+import 'package:xcpilots/state/app_state.dart';
 import 'package:xcpilots/XcPilotsTheme.dart';
 import 'package:xcpilots/data/translation.dart';
-import 'package:xcpilots/state/models/background_model.dart';
+import 'package:xcpilots/state/background/background_model.dart';
 
 class HomePage extends StatelessWidget {
 

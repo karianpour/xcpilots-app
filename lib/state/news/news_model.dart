@@ -57,4 +57,5 @@ String findImageUrlInPictures(Map pictures){
     return getPicturesBaseUrl() + pictures['url'];
   else if(pictures['src']!=null)
     return getPicturesBaseUrl() + pictures['src'];
+  return null;
 }

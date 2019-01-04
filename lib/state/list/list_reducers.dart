@@ -1,4 +1,4 @@
-import 'package:xcpilots/state/actions/list_actions.dart';
+import 'package:xcpilots/state/list/list_actions.dart';
 
 
 Map<String, dynamic> fetchingList(Map<String, dynamic> state, ListFetchingMoreRowsAction action){
@@ -45,7 +45,7 @@ Map<String, dynamic> fetchingListSucceed(Map<String, dynamic> state, ListFetchin
     newList['rowQty'] = _lastRowIndex + 1 + 1;
   }else{
     newList['noRowAvailable'] = _lastRowIndex == null ? true : false;
-    newList['rowQty'] = _lastRowIndex + 1;
+    newList['rowQty'] = (_lastRowIndex == null ? -1 : _lastRowIndex) + 1;
   }
 
   return newState;

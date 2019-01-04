@@ -1,9 +1,9 @@
 import 'package:redux_persist/redux_persist.dart';
-import 'package:xcpilots/state/actions/background_actions.dart';
-import 'package:xcpilots/state/actions/list_actions.dart';
-import 'package:xcpilots/state/models/app_state.dart';
-import 'package:xcpilots/state/reducers/list_reducers.dart';
-import 'package:xcpilots/state/reducers/background_reducer.dart';
+import 'package:xcpilots/state/background/background_actions.dart';
+import 'package:xcpilots/state/list/list_actions.dart';
+import 'package:xcpilots/state/app_state.dart';
+import 'package:xcpilots/state/list/list_reducers.dart';
+import 'package:xcpilots/state/background/background_reducer.dart';
 
 AppState appReducer(AppState state, action) {
   return new AppState(

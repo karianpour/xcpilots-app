@@ -4,13 +4,15 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:xcpilots/state/manager/list_manager.dart';
-import 'package:xcpilots/state/models/app_state.dart';
+import 'package:xcpilots/state/list/list_manager.dart';
+import 'package:xcpilots/state/app_state.dart';
 import 'package:flutter/widgets.dart';
-import 'package:xcpilots/state/models/list_model.dart';
-import 'package:xcpilots/state/models/news_model.dart';
+import 'package:xcpilots/state/list/list_model.dart';
+import 'package:xcpilots/state/news/news_model.dart';
 import 'package:xcpilots/utils.dart';
 import 'package:xcpilots/widgets/ui_utils.dart';
+
+Timer _debounce;
 
 class NewsList extends StatelessWidget {
 
@@ -31,7 +33,6 @@ class NewsList extends StatelessWidget {
     return row;
   }
 
-  Timer _debounce;
   _handleScrollPositionChanged(ListModel vm, double position) {
     if (_debounce?.isActive ?? false) _debounce.cancel();
     _debounce = Timer(const Duration(milliseconds: 500), () {
@@ -47,6 +48,7 @@ class NewsList extends StatelessWidget {
         }
       },
       child: ListView.builder(
+        physics: const AlwaysScrollableScrollPhysics(),
         padding: const EdgeInsets.all(0.0),
         controller: vm.scrollController,
 

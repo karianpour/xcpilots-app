@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:redux_persist/redux_persist.dart';
-import 'package:xcpilots/state/middlewares/background_middlewares.dart';
-import 'package:xcpilots/state/middlewares/list_middleware.dart';
-import 'package:xcpilots/state/reducers/app_reducers.dart';
-import 'package:xcpilots/state/models/app_state.dart';
+import 'package:xcpilots/state/background/background_middlewares.dart';
+import 'package:xcpilots/state/list/list_middleware.dart';
+import 'package:xcpilots/state/app_reducers.dart';
+import 'package:xcpilots/state/app_state.dart';
 import 'package:xcpilots/data/translation.dart';
 import 'package:xcpilots/pages/HomePage.dart';
 import 'package:fluro/fluro.dart';
@@ -20,31 +20,30 @@ class App{
 
 void main() {
   defineRoutes(App.router);
+  Persistor<AppState> persistor = Persistor<AppState>(
+    debug: true,
+    storage: FlutterStorage("xcpilots"),
+    decoder: AppState.fromJson,
+  );
+  Store<AppState> store = Store<AppState>(
+    appReducer,
+    initialState: AppState(),
+    middleware: [persistor.createMiddleware()]
+      ..addAll(createListMiddlewares())
+      ..addAll(createBackgroundMiddlewares())
+      ,
+  );
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
-    .then((_) {
-        runApp(XcPilotsApp());
-    });
+  .then((_) {
+      runApp(XcPilotsApp(persistor, store));
+  });
 }
 
 class XcPilotsApp extends StatelessWidget {
-  Persistor<AppState> persistor;
-  Store<AppState> store;
+  final Persistor<AppState> persistor;
+  final Store<AppState> store;
 
-  XcPilotsApp(){
-    persistor = Persistor<AppState>(
-      debug: true,
-      storage: FlutterStorage("xcpilots"),
-      decoder: AppState.fromJson,
-    );
-    store = Store<AppState>(
-      appReducer,
-      initialState: AppState(),
-      middleware: [persistor.createMiddleware()]
-        ..addAll(createListMiddlewares())
-        ..addAll(createBackgroundMiddlewares())
-        ,
-    );
-
+  XcPilotsApp(this.persistor, this.store){
     load(store);
   }
 
