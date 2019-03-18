@@ -13,7 +13,6 @@ Map translations = {
   'publish_time': 'زمان انتشار',
   'kayvan arianpour': 'کیوان آرین‌پور',
   'sadegh barikani': 'صادق باریکانی',
-  'mohammad azari': 'محمد آذری',
   'matin firoozi': 'متین فیروزی',
   'bowo': 'بوُوُ',
   'version': 'نسخه',

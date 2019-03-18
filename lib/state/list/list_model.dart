@@ -4,12 +4,15 @@ import 'package:redux/redux.dart';
 import 'package:xcpilots/state/list/list_actions.dart';
 import 'package:xcpilots/state/app_state.dart';
 
+typedef Future Referesh();
 typedef void SaveScrollPosition(double position);
 typedef void FetchMoreRows(bool firstFetch);
+typedef void DispatchAction(dynamic action);
 
 int counter = 0;
 
 class ListModel {
+  final String modelName;
   final int rowQty;
   final bool noRowAvailable;
   final bool lastTimeFailed;
@@ -19,15 +22,16 @@ class ListModel {
   final bool fetching;
   final double scrollPosition;
 
-  final Function refresh;
+  final Referesh refresh;
   final FetchMoreRows fetchMoreRows;
   final SaveScrollPosition saveScrollPosition;
+  final DispatchAction dispatch;
 
   final ScrollController scrollController;
 
-  ListModel({this.rowQty, this.noRowAvailable, this.lastTimeFailed, this.refreshTime, this.lastRowIndex, this.rows, this.fetching, this.scrollPosition, this.refresh, this.fetchMoreRows, this.saveScrollPosition, this.scrollController});
+  ListModel({this.modelName, this.rowQty, this.noRowAvailable, this.lastTimeFailed, this.refreshTime, this.lastRowIndex, this.rows, this.fetching, this.scrollPosition, this.refresh, this.fetchMoreRows, this.saveScrollPosition, this.dispatch, this.scrollController});
 
-  static  listFromStore(String modelName){
+  static listFromStore(String modelName){
     return (Store<AppState> store) => fromStore(store, modelName);
   }
 
@@ -43,6 +47,7 @@ class ListModel {
     }
 
     return ListModel(
+      modelName: modelName,
       rowQty: list['rowQty'],
       noRowAvailable: list['noRowAvailable'],
       lastTimeFailed: list['lastTimeFailed'],
@@ -59,8 +64,12 @@ class ListModel {
         store.dispatch(ListFetchMoreRowsAction(modelName, firstFetch));
       },
       saveScrollPosition: (double position) {
-        store.dispatch(ListSaveScrollPositionAction(modelName, position));
-        // store.state.state[modelName]['scrollPosition'] = position;
+        // TODO it should not dispatch, it should save the position some where that we can load later before we load the list
+        // it can be done via state persisting process, and also updated directly on the state, not via dispatch.
+        // store.dispatch(ListSaveScrollPositionAction(modelName, position));
+      },
+      dispatch: (dynamic action) {
+        store.dispatch(action);
       }
     );
   }

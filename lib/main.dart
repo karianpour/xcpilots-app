@@ -3,6 +3,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:redux_persist/redux_persist.dart';
 import 'package:xcpilots/state/background/background_middlewares.dart';
+import 'package:xcpilots/state/downloader.dart';
 import 'package:xcpilots/state/list/list_middleware.dart';
 import 'package:xcpilots/state/app_reducers.dart';
 import 'package:xcpilots/state/app_state.dart';
@@ -28,9 +29,10 @@ void main() {
   Store<AppState> store = Store<AppState>(
     appReducer,
     initialState: AppState(),
-    middleware: [persistor.createMiddleware()]
+    middleware: []//persistor.createMiddleware()
       ..addAll(createListMiddlewares())
       ..addAll(createBackgroundMiddlewares())
+      ..addAll(createDownloaderMiddlewares())
       ,
   );
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
@@ -62,39 +64,43 @@ class XcPilotsApp extends StatelessWidget {
       persistor: persistor,
         builder: (context) => StoreProvider<AppState>(
         store: store,
-        child: createMaterial(),
+        child: AppWidget(),
       ),
     );
   }
 }
 
-Widget createMaterial(){
- return MaterialApp(
-    title: translate('xc_pilots'),
-    theme: ThemeData(
-      fontFamily: 'Nika',
-      primarySwatch: Colors.blue,
-    ),
-    builder: (BuildContext context, Widget child) {
-      return Directionality(
-        textDirection: TextDirection.rtl,
-        child: Builder(
-          builder: (BuildContext context) {
-            return MediaQuery(
-              data: MediaQuery.of(context).copyWith(
-                    textScaleFactor: 1.0,
-                  ),
-              child: child,
-            );
-          },
-        ),
-      );
-    },
-    initialRoute: '/',
-    home: HomePage(),
-    routes: xcPilotsRoutes,
-    onGenerateRoute: App.router.generator,
-  );
+class AppWidget extends StatelessWidget{
+
+  @override
+  Widget build(BuildContext context){
+    return MaterialApp(
+      title: translate('xc_pilots'),
+      theme: ThemeData(
+        fontFamily: 'Nika',
+        primarySwatch: Colors.blue,
+      ),
+      builder: (BuildContext context, Widget child) {
+        return Directionality(
+          textDirection: TextDirection.rtl,
+          child: Builder(
+            builder: (BuildContext context) {
+              return MediaQuery(
+                data: MediaQuery.of(context).copyWith(
+                      textScaleFactor: 1.0,
+                    ),
+                child: child,
+              );
+            },
+          ),
+        );
+      },
+      initialRoute: '/',
+      home: HomePage(),
+      routes: xcPilotsRoutes,
+      onGenerateRoute: App.router.generator,
+    );
+  }
 }
 
 void defineRoutes(Router router) {

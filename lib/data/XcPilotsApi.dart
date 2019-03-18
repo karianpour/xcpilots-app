@@ -43,9 +43,13 @@ class XcPilotsApi {
         //headers: {HttpHeaders.authorizationHeader: authentication})
         .timeout(const Duration(seconds: 30));
       if(response.statusCode == HttpStatus.ok){
-        dynamic data = json.decode(response.body);
-        if(data is List){
-          return data.cast<Map>();
+        try{
+          dynamic data = json.decode(response.body);
+          if(data is List){
+            return data.cast<Map>();
+          }
+        }catch(e){
+          throw Exception('could not parse json data ${response.body}');
         }
         return null;
       }else{
@@ -61,16 +65,28 @@ class XcPilotsApi {
 
   Future<List> fetchData({String modelName, String before}) async{
 
+    String section;
+    if(modelName=='radio'){
+      section = 'radio';
+      modelName = 'content';
+    }else if(modelName=='glide'){
+      section = 'glide';
+      modelName = 'content';
+    }
+
     Map filter = {
+      "where": {},
       "order": "created_at DESC", 
       "limit": 10
     };
 
+    if(section != null){ 
+      filter["where"]["section"] = section;
+    }
+
     if(before!=null){
-      filter['where'] = {
-        "created_at": {
-          "lt": before
-        }
+      filter['where']["created_at"] = {
+        "lt": before
       };
     }
 
@@ -89,9 +105,13 @@ class XcPilotsApi {
         //headers: {HttpHeaders.authorizationHeader: authentication}
         ).timeout(const Duration(seconds: 30));
       if(response.statusCode == HttpStatus.ok){
-        dynamic data = json.decode(response.body);
-        if(data is List){
-          return data.cast<Map>();
+        try{
+          dynamic data = json.decode(response.body);
+          if(data is List){
+            return data.cast<Map>();
+          }
+        }catch(e){
+          throw Exception('could not parse json data ${response.body}');
         }
         return null;
       }else{
@@ -104,6 +124,7 @@ class XcPilotsApi {
     }
   }
 
+//it will be depracted after radio glide refactor
   Future<List<Map>> fetchContentData({String section, String before}) async{
 
     String modelName = 'content';
@@ -137,9 +158,13 @@ class XcPilotsApi {
         //headers: {HttpHeaders.authorizationHeader: authentication}
         ).timeout(const Duration(seconds: 30));
       if(response.statusCode == HttpStatus.ok){
-        dynamic data = json.decode(response.body);
-        if(data is List){
-          return data.cast<Map>();
+        try{
+          dynamic data = json.decode(response.body);
+          if(data is List){
+            return data.cast<Map>();
+          }
+        }catch(e){
+          throw Exception('could not parse json data ${response.body}');
         }
         return null;
       }else{

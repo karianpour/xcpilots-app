@@ -38,8 +38,14 @@ _dashboard(BuildContext context) {
 
           return Container(
             constraints: BoxConstraints.expand(),
-            decoration: backgroundUrl == null ? null : BoxDecoration(
+            decoration: BoxDecoration(
               image:
+                  backgroundUrl == null ? 
+                  DecorationImage(
+                    image: AssetImage('assets/images/xcp.png'),
+                    fit: BoxFit.contain
+                  )
+                  : 
                   DecorationImage(
                     //image: NetworkImageWithRetry(backgroundUrl), //AssetImage('assets/images/xcpilots_bg.jpeg'),
                     image: CachedNetworkImageProvider(backgroundUrl),

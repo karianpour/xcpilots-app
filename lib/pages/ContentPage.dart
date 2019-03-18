@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:xcpilots/data/translation.dart';
 import 'package:xcpilots/widgets/list_ui.dart';
-import 'package:xcpilots/widgets/news_ui.dart';
+import 'package:xcpilots/widgets/content_ui.dart';
 
-class NewsPage extends StatelessWidget {
+class ContentPage extends StatelessWidget {
+  final String _title;
+  final String _modelName;
+
+  ContentPage(this._title, this._modelName);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(translate('news_page_title')),
+        title: Text(translate(_title)),
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.home),
@@ -22,8 +26,9 @@ class NewsPage extends StatelessWidget {
           )
         ],
       ),
-      body: InfinitList('news', (map, index, listModel){
-        return NewsCard(map, index);
+      
+      body: InfinitList(_modelName, (map, index, listModel){
+        return ContentCard(map, index, listModel);
       }),
     );
   }

@@ -38,7 +38,7 @@ _aboutUs(BuildContext context) {
           constraints: BoxConstraints.tightFor(width: 50.0),
           child: Padding(
             padding: const EdgeInsets.only(left: imagePadding, right: imagePadding, bottom: 10.0),
-            child: Image(image: AssetImage('assets/images/XcBowo.jpg'), fit: BoxFit.fitWidth,),
+            child: Image(image: AssetImage('assets/images/xcp.png'), fit: BoxFit.fitWidth,),
           )),
         Center(
           child: Column(
@@ -46,7 +46,6 @@ _aboutUs(BuildContext context) {
               Text(translate('about_us_content')),
               Text(translate('kayvan arianpour')),
               Text(translate('sadegh barikani')),
-              Text(translate('mohammad azari')),
               Text(translate('matin firoozi')),
               Text(translate('bowo')),
               Text(translate('version') +' '+ mapToFarsi("1.0.6")),
