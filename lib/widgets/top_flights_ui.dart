@@ -54,66 +54,84 @@ class TopFlights extends StatelessWidget {
   }
 
   _buildCategory(Category category, BuildContext context) {
-    return Column(
-      children: <Widget>[
-        Text(translate(category.name), style: Theme.of(context).textTheme.headline,),
-        Container(
-          child: Column(
-            children: 
-              category.flights == null ? 
-                Text('empty')
-              : category.flights.map((f) {
-              return Column(
-                children: <Widget>[
-                  Row(
+    return Container(
+      margin: EdgeInsets.fromLTRB(2, 10, 2, 10),
+      padding: EdgeInsets.all(5),
+      decoration: BoxDecoration(
+        border: Border.all(color: Colors.black87),
+        borderRadius: BorderRadius.all(Radius.elliptical(20, 15)),
+        color: Colors.black12,
+      ),
+      child: Column(
+        children: <Widget>[
+          Text(translate(category.name), style: Theme.of(context).textTheme.headline),
+          Container(
+            child: Column(
+              children: 
+                category.flights == null ? 
+                  Text('empty')
+                : category.flights.map((f) {
+                return Container(
+                  margin: EdgeInsets.fromLTRB(2, 10, 2, 10),
+                  padding: EdgeInsets.all(5),
+                  decoration: BoxDecoration(
+                    border: Border.all(color:Colors.black38),
+                    borderRadius: BorderRadius.all(Radius.elliptical(30, 15)),
+                    color: Colors.black26,
+                  ),
+                  child: Column(
                     children: <Widget>[
-                      Text(translate('flight_date') + ' :'),
-                      Text('\u200e' + mapToFarsi(f.flightDate.toString(showTime: true))),
-                      Expanded(
-                        flex: 1,
-                        child: Text(translate('points') + ' :', textAlign: TextAlign.end,)
+                      Row(
+                        children: <Widget>[
+                          Text(translate('flight_date') + ' :'),
+                          Text('\u200e' + mapToFarsi(f.flightDate.toString(showTime: true))),
+                          Expanded(
+                            flex: 1,
+                            child: Text(translate('points') + ' :', textAlign: TextAlign.end,)
+                          ),
+                          Text(
+                            mapToFarsi(f.flightPoints.toString()),
+                            textAlign: TextAlign.end,
+                            style: Theme.of(context).textTheme.headline,
+                          ),
+                        ],
                       ),
-                      Text(
-                        mapToFarsi(f.flightPoints.toString()),
-                        textAlign: TextAlign.end,
-                        style: Theme.of(context).textTheme.headline,
+                      Row(
+                        children: <Widget>[
+                          Text(translate('point_name') + ' :'),
+                          Text(f.pilotName),
+                          Expanded(
+                            flex: 1,
+                            child: Text(translate('site_name') + ' :', textAlign: TextAlign.end),
+                          ),
+                          Text(f.siteName +' - '+ f.siteCountry),
+                        ],
                       ),
+                      Row(
+                        children: <Widget>[
+                          Text(translate('glider_name') + ' :'),
+                          Text(f.glider),
+                          Expanded(
+                            flex: 1,
+                            child: Text(translate('glider_class') + ' :', textAlign: TextAlign.end,)
+                          ),
+                          Text(f.gliderClass),
+                        ],
+                      ),
+                      RaisedButton(
+                        child: Text(translate('show_flihgt')),
+                        onPressed: (){
+                          openXContest(f.flightUrl);
+                        },
+                      )
                     ],
                   ),
-                  Row(
-                    children: <Widget>[
-                      Text(translate('point_name') + ' :'),
-                      Text(f.pilotName),
-                      Expanded(
-                        flex: 1,
-                        child: Text(translate('site_name') + ' :', textAlign: TextAlign.end),
-                      ),
-                      Text(f.siteName +' - '+ f.siteCountry),
-                    ],
-                  ),
-                  Row(
-                    children: <Widget>[
-                      Text(translate('glider_name') + ' :'),
-                      Text(f.glider),
-                      Expanded(
-                        flex: 1,
-                        child: Text(translate('glider_class') + ' :', textAlign: TextAlign.end,)
-                      ),
-                      Text(f.gliderClass),
-                    ],
-                  ),
-                  RaisedButton(
-                    child: Text(translate('show_flihgt')),
-                    onPressed: (){
-                      openXContest(f.flightUrl);
-                    },
-                  )
-                ],
-              );
-            }).toList(),
+                );
+              }).toList(),
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 

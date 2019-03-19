@@ -4,11 +4,13 @@ import 'package:dio/dio.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:redux/redux.dart';
 import 'package:xcpilots/state/app_state.dart';
+import 'package:xcpilots/state/list/list_actions.dart';
 
 List<Middleware<AppState>> createDownloaderMiddlewares(){
   return [
     new TypedMiddleware<AppState, DownloadFileAction>(_downloadFile()),
     new TypedMiddleware<AppState, DeleteFileAction>(_deleteFile()),
+    new TypedMiddleware<AppState, ListFetchingMoreRowsSucceedAction>(_setupAlreadyDownloadedFiles()),
   ];
 }
 
@@ -193,6 +195,49 @@ Middleware<AppState> _deleteFile(){
       }catch(error){
         store.dispatch(DownloadFileStateAction(modelName, id, false, false, null));
         print(error);
+      }
+    }
+    next(action);
+  };
+}
+
+Middleware<AppState> _setupAlreadyDownloadedFiles(){
+  return (Store store, action, NextDispatcher next) async{
+    if(action is ListFetchingMoreRowsSucceedAction){
+      String modelName = action.modelName;
+
+      if(modelName=='glide' || modelName=='radio'){
+        print('lets check files');
+
+        for(var i=0; i < action.rows.length; i++){
+          Map row = action.rows[i];
+          String fileName = row['file']['filename'];
+          int fileSize = row['file']['size'];
+          String directory = modelName;
+          final documentsDir = await getApplicationDocumentsDirectory();
+          var dir = Directory('${documentsDir.path}/$directory');
+          String path = '${dir.path}/$fileName';
+          var file = File(path);
+          if(await file.exists()){
+            if((await file.length()) == fileSize){
+              row['downloading'] = false;
+              row['downloaded'] = true;
+            }else{
+              String id = row['id'];
+              _DownLoadProcess dp = downlodProcesses['$modelName.$id'];
+              if(dp!=null){
+                row['downloading'] = true;
+                row['downloaded'] = false;
+              }else{
+                row['downloading'] = false;
+                row['downloaded'] = false;
+
+                print('file abondoned, deleting from $path');
+                await file.delete(recursive: false);
+              }
+            }
+          }
+        }
       }
     }
     next(action);
