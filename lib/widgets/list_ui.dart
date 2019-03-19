@@ -74,6 +74,7 @@ class InfinitList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+  // print('build infinitlist');
     return StoreConnector<AppState, ListModel>(
     		// Build a viewModel, as usual:
         converter: ListModel.listFromStore(modelName),

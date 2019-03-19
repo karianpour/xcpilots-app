@@ -14,6 +14,7 @@ class NewsCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FlatButton(
+      key : Key(data['id']),
       padding: EdgeInsets.all(3.0),
       onPressed: () {
         if(data["id"]==null) return;

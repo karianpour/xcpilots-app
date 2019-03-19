@@ -11,6 +11,7 @@ class ContentPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // print('build content');
     return Scaffold(
       appBar: AppBar(
         title: Text(translate(_title)),

@@ -13,7 +13,7 @@ import 'package:fluro/fluro.dart';
 import 'package:xcpilots/routes.dart';
 import 'package:redux/redux.dart';
 import 'package:flutter_redux/flutter_redux.dart';
-import 'package:redux_persist_flutter/redux_persist_flutter.dart';
+// import 'package:redux_persist_flutter/redux_persist_flutter.dart';
 import 'package:xcpilots/state/top_flights/top_flights_actions.dart';
  
 class App{
@@ -22,11 +22,11 @@ class App{
 
 void main() {
   defineRoutes(App.router);
-  Persistor<AppState> persistor = Persistor<AppState>(
-    debug: true,
-    storage: FlutterStorage("xcpilots"),
-    decoder: AppState.fromJson,
-  );
+  // Persistor<AppState> persistor = Persistor<AppState>(
+  //   debug: true,
+  //   storage: FlutterStorage("xcpilots"),
+  //   decoder: AppState.fromJson,
+  // );
   Store<AppState> store = Store<AppState>(
     appReducer,
     initialState: AppState(),
@@ -39,36 +39,41 @@ void main() {
   );
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
   .then((_) {
-      runApp(XcPilotsApp(persistor, store));
+      runApp(XcPilotsApp(store));
   });
 }
 
 class XcPilotsApp extends StatelessWidget {
-  final Persistor<AppState> persistor;
+  // final Persistor<AppState> persistor;
   final Store<AppState> store;
 
-  XcPilotsApp(this.persistor, this.store){
+  XcPilotsApp(this.store){
     load(store);
   }
 
   Future<AppState> load(Store<AppState> store) async {
-    try{
-      return await persistor.load(store);
-    }catch(err){
-      await persistor.save(store);
-      return await persistor.load(store);
-    }
+    // try{
+    //   return await persistor.load(store);
+    // }catch(err){
+    //   await persistor.save(store);
+    //   return await persistor.load(store);
+    // }
   } 
   
   @override
   Widget build(BuildContext context) {
-    return PersistorGate(
-      persistor: persistor,
-        builder: (context) => StoreProvider<AppState>(
-        store: store,
-        child: AppWidget(),
-      ),
+    // print('build xcpilots');
+    return StoreProvider<AppState>(
+      store: store,
+      child: AppWidget(),
     );
+    // return PersistorGate(
+    //   persistor: persistor,
+    //     builder: (context) => StoreProvider<AppState>(
+    //     store: store,
+    //     child: AppWidget(),
+    //   ),
+    // );
   }
 }
 
@@ -76,6 +81,7 @@ class AppWidget extends StatelessWidget{
 
   @override
   Widget build(BuildContext context){
+    // print('build app widget');
     return MaterialApp(
       title: translate('xc_pilots'),
       theme: ThemeData(

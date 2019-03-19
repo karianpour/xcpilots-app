@@ -69,7 +69,9 @@ class ContentCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // print('build content card $index');
     return FlatButton(
+      key: Key(data['id']),
       padding: EdgeInsets.all(3.0),
       onPressed: () {
         this.handleOpen(data);
