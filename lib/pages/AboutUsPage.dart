@@ -48,7 +48,7 @@ _aboutUs(BuildContext context) {
               Text(translate('sadegh barikani')),
               Text(translate('matin firoozi')),
               Text(translate('bowo')),
-              Text(translate('version') +' '+ mapToFarsi("1.0.6")),
+              Text(translate('version') +' '+ mapToFarsi("1.0.7")),
             ],
           ),
         ),
