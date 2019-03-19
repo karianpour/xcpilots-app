@@ -5,6 +5,8 @@ import 'package:xcpilots/state/list/list_actions.dart';
 import 'package:xcpilots/state/app_state.dart';
 import 'package:xcpilots/state/list/list_reducers.dart';
 import 'package:xcpilots/state/background/background_reducer.dart';
+import 'package:xcpilots/state/top_flights/top_flights_actions.dart';
+import 'package:xcpilots/state/top_flights/top_flights_reducers.dart';
 
 AppState appReducer(AppState state, action) {
   return new AppState(
@@ -47,6 +49,12 @@ Map<String, dynamic> doAction(Map state, action){
     return deleteFile(state, action);
   }else if(action is DownloadFileStateAction){
     return downloadFileState(state, action);
+  }else if(action is InitiateTopFlightsAction){
+    return initiateTopFlightsState(state, action);
+  }else if(action is FetchTopFlightsStateAction){
+    return fetchTopFlightsState(state, action);
+  }else if(action is FetchTopFlightsDoneAction){
+    return fetchTopFlights(state, action);
   }
   return state;
 }

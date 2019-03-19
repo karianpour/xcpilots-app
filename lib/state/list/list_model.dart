@@ -4,7 +4,7 @@ import 'package:redux/redux.dart';
 import 'package:xcpilots/state/list/list_actions.dart';
 import 'package:xcpilots/state/app_state.dart';
 
-typedef Future Referesh();
+typedef Future Refresh();
 typedef void SaveScrollPosition(double position);
 typedef void FetchMoreRows(bool firstFetch);
 typedef void DispatchAction(dynamic action);
@@ -22,7 +22,7 @@ class ListModel {
   final bool fetching;
   final double scrollPosition;
 
-  final Referesh refresh;
+  final Refresh refresh;
   final FetchMoreRows fetchMoreRows;
   final SaveScrollPosition saveScrollPosition;
   final DispatchAction dispatch;

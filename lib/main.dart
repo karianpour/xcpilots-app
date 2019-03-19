@@ -14,6 +14,7 @@ import 'package:xcpilots/routes.dart';
 import 'package:redux/redux.dart';
 import 'package:flutter_redux/flutter_redux.dart';
 import 'package:redux_persist_flutter/redux_persist_flutter.dart';
+import 'package:xcpilots/state/top_flights/top_flights_actions.dart';
  
 class App{
   static Router router = Router();
@@ -33,6 +34,7 @@ void main() {
       ..addAll(createListMiddlewares())
       ..addAll(createBackgroundMiddlewares())
       ..addAll(createDownloaderMiddlewares())
+      ..addAll(createTopFlightsMiddlewares())
       ,
   );
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])

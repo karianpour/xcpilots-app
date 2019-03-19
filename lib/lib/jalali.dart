@@ -48,8 +48,10 @@ class PersianDate {
   }
 
   PersianDate.fromGregorianString(String datetime){
+    if(datetime!=null){
     _dateTime = DateTime.parse(datetime);
     convertGreToJal();
+    }
   }
 
   PersianDate.fromDateTime(DateTime datetime)
@@ -75,14 +77,16 @@ class PersianDate {
           'At least one of arguments [showDate or showTime] must be true');
     }
     String stringDate = '';
-    if(showDate) {
-      stringDate = year.toString() + '/' + month.toString() + '/' + day.toString();
-      if(showTime){
-        stringDate += ' ';
+    if(_dateTime!=null){
+      if(showDate) {
+        stringDate = year.toString() + '/' + month.toString() + '/' + day.toString();
+        if(showTime){
+          stringDate += ' ';
+        }
       }
-    }
-    if(showTime) {
-      stringDate += _dateTime.hour.toString() + ':' + _dateTime.minute.toString() + ':' + _dateTime.second.toString();
+      if(showTime) {
+        stringDate += _dateTime.hour.toString() + ':' + _dateTime.minute.toString() + ':' + _dateTime.second.toString();
+      }
     }
     return stringDate;
   }

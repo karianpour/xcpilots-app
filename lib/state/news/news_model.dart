@@ -14,16 +14,9 @@ String getNewsTime(data){
   if(data==null) return '';
   var timestamp = data['created_at'];
   if(timestamp==null) return '';
-  PersianDate date = new PersianDate.fromGregorianString(timestamp);
+  PersianDate date = PersianDate.fromGregorianString(timestamp);
   final formatted = date.toString(showTime: true);
-  //print(formatted);
-  final converted = formatted.replaceAllMapped(RegExp(r"\d"), 
-    (Match m) {
-      return convertDigit(m[0]);
-    }
-  );
-  //print(converted);
-  return translate('publish_time') +' \u200e'+ converted;
+  return translate('publish_time') +' \u200e'+ mapToFarsi(formatted);
 }
 
 String getNewsDescription(data){

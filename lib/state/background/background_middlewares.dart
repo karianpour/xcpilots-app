@@ -11,19 +11,20 @@ List<Middleware<AppState>> createBackgroundMiddlewares(){
 
 Middleware<AppState> _fetchBackground(){
   return (Store store, action, NextDispatcher next) async{
-    store.dispatch(new BackgroundFetchingAction(action.section, true));
+    if(action is FetchBackgroundAction){
+      store.dispatch(new BackgroundFetchingAction(action.section, true));
 
-    try{
-      List rows = await XcPilotsApi.getInstance().fetchBackground(section: action.section);
-      store.dispatch(BackgroundFetchingSucceedAction(action.section, rows));
-    }catch(error){
-      store.dispatch(BackgroundFetchingFailedAction(action.section));
-      print(error);
-    } finally {
-      store.dispatch(BackgroundFetchingAction(action.section, false));
-      print('end fetching');
+      try{
+        List rows = await XcPilotsApi.getInstance().fetchBackground(section: action.section);
+        store.dispatch(BackgroundFetchingSucceedAction(action.section, rows));
+      }catch(error){
+        store.dispatch(BackgroundFetchingFailedAction(action.section));
+        print(error);
+      } finally {
+        store.dispatch(BackgroundFetchingAction(action.section, false));
+        print('end fetching');
+      }
     }
-
     next(action);
   };
 }

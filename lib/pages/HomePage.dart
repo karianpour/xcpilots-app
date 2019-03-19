@@ -99,7 +99,7 @@ class HomeOptions extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: <Widget>[
-              DashboardOption(title: translate('flights_highlight'), route: '/flights_highlight'),
+              DashboardOption(title: translate('top_flights'), route: '/top_flights'),
               DashboardOption(title: translate('about_us'), route: '/about_us'),
             ],
           ),

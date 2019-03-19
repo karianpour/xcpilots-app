@@ -36,9 +36,9 @@ class XcPilotsApi {
     };
     Uri uri = new Uri(scheme: scheme, host: host, pathSegments: [restApi, 'background'], queryParameters: queryParameters);
     var url = uri.toString();
-    print(url);
 
     try{
+      // print('fetching : $url');
       final response = await http.get(url) 
         //headers: {HttpHeaders.authorizationHeader: authentication})
         .timeout(const Duration(seconds: 30));
@@ -97,10 +97,9 @@ class XcPilotsApi {
     };
     Uri uri = new Uri(scheme: scheme, host: host, pathSegments: [restApi, modelName], queryParameters: queryParameters);
     var url = uri.toString();
-    print(url);
 
     try{
-      print('fetching : $url');
+      // print('fetching : $url');
       final response = await http.get(url, 
         //headers: {HttpHeaders.authorizationHeader: authentication}
         ).timeout(const Duration(seconds: 30));
@@ -116,41 +115,19 @@ class XcPilotsApi {
         return null;
       }else{
         print(response);
-        throw Exception('could not load news data');
+        throw Exception('could not load content data');
       }
     }catch (e) {
       print(e);
-      throw Exception('exception occured while fetching news data from the server.');
+      throw Exception('exception occured while fetching content data from the server.');
     }
   }
 
 //it will be depracted after radio glide refactor
-  Future<List<Map>> fetchContentData({String section, String before}) async{
+  Future<Map> fetchTopFlights() async{
 
-    String modelName = 'content';
-
-    Map filter = {
-      "where": {
-        "section": section
-      },
-      "order": "created_at DESC", 
-      "limit": 100
-    };
-
-    if(before!=null){
-      filter['where']['created_at'] = {
-        "lt": before
-      };
-    }
-
-    print(json.encode(filter));
-
-    Map<String, dynamic> queryParameters = {
-      'filter': json.encode(filter)
-    };
-    Uri uri = new Uri(scheme: scheme, host: host, pathSegments: [restApi, modelName], queryParameters: queryParameters);
+    Uri uri = new Uri(scheme: scheme, host: host, pathSegments: [restApi, 'flights', 'goodOnes']);
     var url = uri.toString();
-    print(url);
 
     try{
       print('fetching : $url');
@@ -160,8 +137,8 @@ class XcPilotsApi {
       if(response.statusCode == HttpStatus.ok){
         try{
           dynamic data = json.decode(response.body);
-          if(data is List){
-            return data.cast<Map>();
+          if(data is Map){
+            return data['data'];
           }
         }catch(e){
           throw Exception('could not parse json data ${response.body}');
@@ -169,11 +146,11 @@ class XcPilotsApi {
         return null;
       }else{
         print(response);
-        throw Exception('could not load news data');
+        throw Exception('could not load top flights data');
       }
     }catch (e) {
       print(e);
-      throw Exception('exception occured while fetching news data from the server.');
+      throw Exception('exception occured while fetching top flights data from the server.');
     }
   }
 }
