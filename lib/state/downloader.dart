@@ -112,7 +112,7 @@ Middleware<AppState> _downloadFile(){
       String directory = modelName;
       print("data $fileName $url");
 
-      store.dispatch(DownloadFileStateAction(modelName, action.id, true, false, null));
+      store.dispatch(DownloadFileStateAction(modelName, action.id, true, false, 0));
 
       try{
         //TODO move this part to api classes
@@ -136,8 +136,18 @@ Middleware<AppState> _downloadFile(){
         const String BASE_URL = 'http://api.iranxc.ir';
         Response response = await dio.download(
             '$BASE_URL$url', path, cancelToken: cancelToken, onProgress: (received, total) {
-          print('$received,$fileSize');
-          store.dispatch(DownloadFileStateAction(modelName, id, null, null, received));
+
+          var state = store.state.state[modelName];
+          var key = state['rows'].keys.firstWhere((k) => state['rows'][k]['id']==id, orElse: () => null);
+          if(key != null && received!=null){
+            int prevReceived = state['rows'][key]['received'];
+            if(prevReceived==null) prevReceived = 0;
+            // if( (received - prevReceived) / state['rows'][key]['file']['size'] > 0.05 ) {
+            if( (received - prevReceived) > (200 * 1024) ) {
+              print('$received,$fileSize');
+              store.dispatch(DownloadFileStateAction(modelName, id, null, null, received));
+            }
+          }
         });
 
         downlodProcesses.remove('$modelName.$id');
@@ -159,7 +169,6 @@ Middleware<AppState> _deleteFile(){
       String id = action.id;
       String fileName = action.fileName;
       String directory = modelName;
-
       
       _DownLoadProcess downloadProcess = downlodProcesses['$modelName.$id'];
       if(downloadProcess!=null && downloadProcess.cancelToken!=null){
