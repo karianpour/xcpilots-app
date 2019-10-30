@@ -119,7 +119,7 @@ Middleware<AppState> _downloadFile(){
       try{
         //TODO move this part to api classes
         var dio = new Dio();
-        //dio.options.baseUrl = "http://api.iranxc.ir/";
+        //dio.options.baseUrl = "http://xcpilots.karianpour.ir/";
         dio.options.connectTimeout = 5000;
         dio.options.receiveTimeout=5000;
 
@@ -135,9 +135,9 @@ Middleware<AppState> _downloadFile(){
         var cancelToken = new CancelToken();
         downlodProcesses['$modelName.$id'] = _DownLoadProcess(modelName, id, cancelToken);
 
-        const String BASE_URL = 'http://api.iranxc.ir';
+        const String BASE_URL = 'http://xcpilots.karianpour.ir';
         Response response = await dio.download(
-            '$BASE_URL$url', path, cancelToken: cancelToken, onProgress: (received, total) {
+            '$BASE_URL$url', path, cancelToken: cancelToken, onReceiveProgress: (received, total) {
 
           var state = store.state.state[modelName];
           var key = state['rows'].keys.firstWhere((k) => state['rows'][k]['id']==id, orElse: () => null);
