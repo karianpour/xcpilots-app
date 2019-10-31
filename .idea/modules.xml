@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/xcpilots.iml" filepath="$PROJECT_DIR$/xcpilots.iml" />
-      <module fileurl="file://$PROJECT_DIR$/xcpilots_android.iml" filepath="$PROJECT_DIR$/xcpilots_android.iml" />
+      <module fileurl="file://$PROJECT_DIR$/xcpilotsx.iml" filepath="$PROJECT_DIR$/xcpilotsx.iml" />
+      <module fileurl="file://$PROJECT_DIR$/android/xcpilotsx_android.iml" filepath="$PROJECT_DIR$/android/xcpilotsx_android.iml" />
     </modules>
   </component>
 </project>

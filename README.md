@@ -1,11 +1,5 @@
 # xcpilots
 
-A new Flutter project.
-
-## Getting Started
-
-For help getting started with Flutter, view our online
-[documentation](https://flutter.io/).
 
 
 Todo List
@@ -21,4 +15,5 @@ Todo List
 
 
 Versioning :
-In : AboutUsPage.dart , build.gradle , Info.plist
+In : AboutUsPage.dart , 
+(build.gradle , Info.plist) this two is set from pub yaml file
